@@ -4,3 +4,4 @@ Scripts
 share
 __pycache__
 pyvenv.cfg
+.vscode

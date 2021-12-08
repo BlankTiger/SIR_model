@@ -6,8 +6,8 @@ setup(
     packages=["sir_model"],
     install_requires=[
         "matplotlib==3.4.1",
-        "numpy==1.20.2",
+        "numpy",
         "PySimpleGUI==4.55.1",
-        "scipy==1.6.2",
+        "scipy",
     ],
 )

@@ -1,7 +1,0 @@
-{
-    "python.pythonPath": "C:\\Users\\work\\AppData\\Local\\Programs\\Python\\Python310\\python.exe",
-    "editor.cursorBlinking": "smooth",
-    "editor.cursorSmoothCaretAnimation": true,
-    "python.linting.flake8Enabled": true,
-    "python.linting.enabled": true
-}

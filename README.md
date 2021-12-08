@@ -6,3 +6,4 @@ To install needed dependencies type into the terminal (you have to be in the sam
 ```
 python -m pip install -r requirements.txt
 ```
+After that you can just run the script named model.py.
