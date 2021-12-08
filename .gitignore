@@ -3,4 +3,4 @@ Lib
 Scripts
 share
 __pycache__
-pyenv.cfg
+pyvenv.cfg
