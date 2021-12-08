@@ -4,7 +4,8 @@
 #   compile(open(activate_this_file, "rb").read(), activate_this_file, "exec"),
 #   dict(__file__=activate_this_file),
 # )
-
+__requires__ = ["matplotlib==3.4.1", "PySimpleGUI==4.55.1"]
+import pkg_resources
 import PySimpleGUI as sg
 import numpy as np
 from scipy.integrate import odeint
@@ -16,6 +17,7 @@ import matplotlib.pyplot as plt
 import matplotlib
 import matplotlib.patches as mpatches
 import platform
+
 
 if platform.system() == "Windows":
     import ctypes
