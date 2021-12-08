@@ -1,34 +1,112 @@
+# #!Scripts/python
+# activate_this_file = "Scripts/activate_this.py"
+# exec(
+#   compile(open(activate_this_file, "rb").read(), activate_this_file, "exec"),
+#   dict(__file__=activate_this_file),
+# )
+
 import PySimpleGUI as sg
 import numpy as np
 from scipy.integrate import odeint
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from sir_model.model import SIR, plot_SIR
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg,
+    NavigationToolbar2Tk,
+)
+import matplotlib.pyplot as plt
+import matplotlib
+import matplotlib.patches as mpatches
+import platform
+
+if platform.system() == "Windows":
+    import ctypes
+
+    if platform.release() == "7":
+        ctypes.windll.user32.SetProcessDPIAware()
+    elif platform.release() == "8" or platform.release() == "10":
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
+
+
+matplotlib.use("TkAgg")
+
+
+def SIR(y, t, beta, gamma):
+    """
+    Function modeling a SIR model.
+
+    Args:
+        t: time
+        y: vector of the variables
+
+    Returns:
+        dydt: vector of the derivatives of the variables
+    """
+    S, I, R = y
+    N = S + I + R
+    dydt = [-beta * S * I / N, beta * S * I / N - gamma * I, gamma * I]
+    return dydt
+
+
+def plot_SIR(y, t, beta, gamma, N):
+    """
+    Function to plot the SIR model.
+
+    Args:
+        S: vector of susceptible individuals
+        I: vector of infected individuals
+        R: vector of recovered individuals
+        t: time
+        a: rate of recovery
+        r: rate of infection
+    """
+    plt.gcf()
+    plt.style.use("fivethirtyeight")
+    # plt.style.use("dark_background")
+    plt.rcParams.update({"font.size": 10})
+    np.set_printoptions(suppress=True)
+    S, I, R = y[:, 0], y[:, 1], y[:, 2]
+    figure = plt.figure()
+    figure.set_dpi(110)
+    figure.set_figwidth(768 / 110)
+    figure.set_figheight(576 / 110)
+    plt.plot(t, S, label="Susceptible")
+    plt.plot(t, I, label="Infected")
+    plt.plot(t, R, label="Recovered")
+    gamma_text = (
+        "$γ = \\frac{1}{\\mathtt{recovery\\;time}} = "
+        + str(round(gamma, 3))
+        + "$"
+    )
+    r_0_text = "$R_0 = \\frac{β}{γ}=" + str(round(beta / gamma, 3)) + "$"
+    plt.ticklabel_format(axis="y", useOffset=False, style="Plain")
+    plt.xlabel("Time [days]")
+    plt.ylabel("Number of people")
+    handles, labels = plt.gca().get_legend_handles_labels()
+    handles.append(mpatches.Patch(color="none", label=gamma_text))
+    handles.append(mpatches.Patch(color="none", label=r_0_text))
+    plt.legend(handles=handles)
+    plt.tight_layout()
+    return figure
+
 
 #################
 # Default values and initial plot
 #################
-r = 0.56
-a = 0.05
+beta = 0.5
+gamma = 0.05
 
 S0 = 1000000
 I0 = 10
 R0 = 0
-N = S0 + I0 + R0
-S0 /= N
-I0 /= N
-R0 /= N
 y0 = [S0, I0, R0]
 
-t_0 = 0
 t_1 = 100
-t_values = np.linspace(t_0, t_1, 100)
+t_values = np.linspace(0, t_1, 100)
 
 # Solve the ODEs
-y_values = odeint(SIR, y0, t_values, args=(a, r))
+y_values = odeint(SIR, y0, t_values, args=(beta, gamma))
 
 # Plot the solution
-fig = plot_SIR(y_values, t_values, a, r, N)
-
+fig = plot_SIR(y_values, t_values, beta, gamma, S0 + I0 + R0)
 #################
 # GUI
 #################
@@ -40,7 +118,7 @@ column1 = sg.Column(
             sg.Text("Susceptible", size=(10, 1)),
             sg.Stretch(),
             sg.InputText(
-                f"{int(S0*N)}",
+                f"{int(S0)}",
                 size=(20, 1),
                 justification="right",
                 key="susceptible",
@@ -50,7 +128,7 @@ column1 = sg.Column(
             sg.Text("Infected", size=(10, 1)),
             sg.Stretch(),
             sg.InputText(
-                f"{int(I0*N)}",
+                f"{int(I0)}",
                 size=(20, 1),
                 justification="right",
                 key="infected",
@@ -60,35 +138,38 @@ column1 = sg.Column(
             sg.Text("Recovered", size=(10, 1)),
             sg.Stretch(),
             sg.InputText(
-                f"{int(R0*N)}",
+                f"{int(R0)}",
                 size=(20, 1),
                 justification="right",
                 key="recovered",
             ),
         ],
         [
-            sg.Text("Start time", size=(10, 1)),
+            sg.Text("Duration", size=(10, 1)),
             sg.Stretch(),
             sg.InputText(
-                f"{t_0}", size=(20, 1), justification="right", key="start_time"
+                f"{t_1}", size=(20, 1), justification="right", key="duration"
             ),
         ],
         [
-            sg.Text("Stop time", size=(10, 1)),
+            sg.Text("β", size=(10, 1)),
             sg.Stretch(),
             sg.InputText(
-                f"{t_1}", size=(20, 1), justification="right", key="stop_time"
+                f"{beta}",
+                size=(20, 1),
+                justification="right",
+                key="beta",
             ),
         ],
         [
-            sg.Text("a", size=(10, 1)),
+            sg.Text("Recovery time", size=(13, 1)),
             sg.Stretch(),
-            sg.InputText(f"{a}", size=(20, 1), justification="right", key="a"),
-        ],
-        [
-            sg.Text("r", size=(10, 1)),
-            sg.Stretch(),
-            sg.InputText(f"{r}", size=(20, 1), justification="right", key="r"),
+            sg.InputText(
+                f"{round(1/gamma, 3)}",
+                size=(20, 1),
+                justification="right",
+                key="recovery_time",
+            ),
         ],
         [sg.Button("Draw", key="-DRAW-", size=(15, 2))],
     ],
@@ -97,8 +178,25 @@ column1 = sg.Column(
 )
 
 column2 = sg.Column(
-    [[sg.Canvas(key="-CANVAS-", size=(800, 500), background_color="white")]],
-    element_justification="right",
+    [
+        [
+            sg.Canvas(
+                key="-CANVAS-",
+                size=(768, 576),
+                background_color="white",
+                expand_y=True,
+                expand_x=True,
+            )
+        ],
+        [
+            sg.Canvas(
+                key="-TOOLBAR-",
+                size=(768, 30),
+                background_color="white",
+                expand_x=True,
+            )
+        ],
+    ],
     expand_y=True,
     expand_x=True,
 )
@@ -114,17 +212,29 @@ window = sg.Window(
     element_justification="c",
     resizable=True,
     finalize=True,
-    grab_anywhere=True,
 )
-window["-CANVAS-"].expand(True, True)
+window.TKroot.tk.call("tk", "scaling", 3)
+
+
+class Toolbar(NavigationToolbar2Tk):
+    def __init__(self, *args, **kwargs):
+        super(Toolbar, self).__init__(*args, **kwargs)
 
 
 #################
 # Drawing functions
 #################
-def draw_fig(canvas, fig):
+def draw_fig(canvas, fig, canvas_toolbar):
+    if canvas.children:
+        for child in canvas.winfo_children():
+            child.destroy()
+    if canvas_toolbar.children:
+        for child in canvas_toolbar.winfo_children():
+            child.destroy()
     figure_canvas_agg = FigureCanvasTkAgg(fig, canvas)
     figure_canvas_agg.draw()
+    toolbar = Toolbar(figure_canvas_agg, canvas_toolbar)
+    toolbar.update()
     figure_canvas_agg.get_tk_widget().pack(
         side="top", fill="both", expand=True
     )
@@ -140,19 +250,15 @@ def delete_figure_agg(figure_canvas_agg):
     for item in figure_canvas_agg.get_tk_widget().find_all():
         figure_canvas_agg.get_tk_widget().delete(item)
     figure_canvas_agg.get_tk_widget().pack_forget()
-    return figure_canvas_agg
 
 
-def create_updated_fig(susceptible, infected, recovered, a, r, t_0, t_1):
+def create_updated_fig(susceptible, infected, recovered, beta, gamma, t_1):
     N = susceptible + infected + recovered
-    susceptible /= N
-    infected /= N
-    recovered /= N
-    t_values = np.linspace(t_0, t_1, int(t_1 - t_0) * 100)
+    t_values = np.linspace(0, t_1, int(t_1) * 100)
     y_values = odeint(
-        SIR, [susceptible, infected, recovered], t_values, args=(a, r)
+        SIR, [susceptible, infected, recovered], t_values, args=(beta, gamma)
     )
-    fig = plot_SIR(y_values, t_values, a, r, N)
+    fig = plot_SIR(y_values, t_values, beta, gamma, N)
     return fig
 
 
@@ -180,7 +286,9 @@ def validate_positive_float_input(value):
 
 
 # Insert initial figure into canvas
-fig_agg = draw_fig(window["-CANVAS-"].TKCanvas, fig)
+fig_agg = draw_fig(
+    window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanvas
+)
 
 
 #################
@@ -196,27 +304,22 @@ while True:
             validate_positive_int_input(values["susceptible"])
             and validate_positive_int_input(values["infected"])
             and validate_positive_int_input(values["recovered"])
-            and validate_positive_float_input(values["a"])
-            and validate_positive_float_input(values["r"])
-            and validate_positive_float_input(values["start_time"])
-            and validate_positive_float_input(values["stop_time"])
+            and validate_positive_float_input(values["beta"])
+            and validate_positive_float_input(values["recovery_time"])
+            and validate_positive_float_input(values["duration"])
         ):
             susceptible = float(values["susceptible"])
             infected = float(values["infected"])
             recovered = float(values["recovered"])
 
-            if susceptible + infected + recovered > 0 and float(
-                values["start_time"]
-            ) < float(values["stop_time"]):
-                t_0 = float(values["start_time"])
-                t_1 = float(values["stop_time"])
-                a = float(values["a"])
-                r = float(values["r"])
-                fig = create_updated_fig(
-                    susceptible, infected, recovered, a, r, t_0, t_1
-                )
-                fig_agg = update_canvas(window["-CANVAS-"].TKCanvas, fig)
-            else:
-                sg.popup_error("Invalid input")
+            t_1 = float(values["duration"])
+            beta = float(values["beta"])
+            gamma = 1 / float(values["recovery_time"])
+            fig = create_updated_fig(
+                susceptible, infected, recovered, beta, gamma, t_1
+            )
+            fig_agg = draw_fig(
+                window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanvas
+            )
         else:
             sg.popup_error("Invalid input", title="Error")

@@ -1,0 +1,7 @@
+{
+    "python.pythonPath": "C:\\Python39\\python.exe",
+    "editor.cursorBlinking": "smooth",
+    "editor.cursorSmoothCaretAnimation": true,
+    "python.linting.flake8Enabled": true,
+    "python.linting.enabled": true
+}
