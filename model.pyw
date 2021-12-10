@@ -48,7 +48,8 @@ def SIR(y, t, beta, gamma):
     return dydt
 
 
-def plot_SIR(y, t, beta, gamma, N):
+
+def plot_SIR(y, t, beta, gamma):
     """
     Function to plot the SIR model.
 
@@ -62,14 +63,13 @@ def plot_SIR(y, t, beta, gamma, N):
     """
     plt.gcf()
     plt.style.use("fivethirtyeight")
-    # plt.style.use("dark_background")
-    plt.rcParams.update({"font.size": 10})
+    plt.rcParams.update({"font.size": 13})
     np.set_printoptions(suppress=True)
     S, I, R = y[:, 0], y[:, 1], y[:, 2]
     figure = plt.figure()
-    figure.set_dpi(110)
-    figure.set_figwidth(768 / 110)
-    figure.set_figheight(576 / 110)
+    dpi = figure.get_dpi()
+    figure.set_figwidth(768 / dpi)
+    figure.set_figheight(576 / dpi)
     plt.plot(t, S, label="Susceptible")
     plt.plot(t, I, label="Infected")
     plt.plot(t, R, label="Recovered")
@@ -108,7 +108,7 @@ t_values = np.linspace(0, t_1, 100)
 y_values = odeint(SIR, y0, t_values, args=(beta, gamma))
 
 # Plot the solution
-fig = plot_SIR(y_values, t_values, beta, gamma, S0 + I0 + R0)
+fig = plot_SIR(y_values, t_values, beta, gamma)
 #################
 # GUI
 #################
@@ -255,12 +255,11 @@ def delete_figure_agg(figure_canvas_agg):
 
 
 def create_updated_fig(susceptible, infected, recovered, beta, gamma, t_1):
-    N = susceptible + infected + recovered
     t_values = np.linspace(0, t_1, int(t_1) * 100)
     y_values = odeint(
         SIR, [susceptible, infected, recovered], t_values, args=(beta, gamma)
     )
-    fig = plot_SIR(y_values, t_values, beta, gamma, N)
+    fig = plot_SIR(y_values, t_values, beta, gamma)
     return fig
 
 
