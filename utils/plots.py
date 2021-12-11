@@ -2,6 +2,19 @@ import numpy as np
 from matplotlib import pyplot as plt
 import matplotlib.patches as mpatches
 
+colors = [
+    "#ffd700",
+    "#ffb14e",
+    "#fa8775",
+    "#ea5f94",
+    "#cd34b5",
+    "#9d02d7",
+    "#0000ff",
+    "#000000",
+    "#000000",
+    "#000000",
+]
+
 
 def plot_SIR(y, t, beta, gamma):
     """ """
@@ -14,9 +27,9 @@ def plot_SIR(y, t, beta, gamma):
     dpi = figure.get_dpi()
     figure.set_figwidth(768 / dpi)
     figure.set_figheight(576 / dpi)
-    plt.plot(t, S, label="Susceptible")
-    plt.plot(t, I, label="Infected")
-    plt.plot(t, R, label="Recovered")
+    plt.plot(t, S, color=colors[0], label="Susceptible")
+    plt.plot(t, I, color=colors[4], label="Infected")
+    plt.plot(t, R, color=colors[6], label="Recovered")
     gamma_text = (
         "$γ = \\frac{1}{\\mathtt{recovery\\;time}} = "
         + str(round(gamma, 3))
@@ -45,12 +58,12 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
     dpi = figure.get_dpi()
     figure.set_figwidth(768 / dpi)
     figure.set_figheight(576 / dpi)
-    plt.plot(t, S, label="Susceptible")
-    plt.plot(t, I, label="Infected")
-    plt.plot(t, R, label="Recovered")
-    plt.plot(t, S_v, "--", color="blue", label="Susceptible (vaccinated)")
-    plt.plot(t, I_v, "--", color="orange", label="Infected (vaccinated)")
-    plt.plot(t, R_v, "--", color="yellow", label="Recovered (vaccinated)")
+    plt.plot(t, S, color=colors[0], label="Susceptible")
+    plt.plot(t, I, color=colors[4], label="Infected")
+    plt.plot(t, R, color=colors[6], label="Recovered")
+    plt.plot(t, S_v, "--", color=colors[1], label="Susceptible (vaccinated)")
+    plt.plot(t, I_v, "--", color=colors[5], label="Infected (vaccinated)")
+    plt.plot(t, R_v, "--", color=colors[7], label="Recovered (vaccinated)")
     gamma_text = (
         "$γ = \\frac{1}{\\mathtt{recovery\\;time}} = "
         + str(round(gamma, 3))

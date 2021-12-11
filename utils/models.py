@@ -1,6 +1,3 @@
-from .mathematics import heaviside_analytical as hev
-
-
 def SIR(y, t, beta, gamma):
     """
     Function modeling a SIR model.
@@ -37,6 +34,8 @@ def SIR_with_vaccination(y, t, beta, gamma, vac_rate, eff, t_1, t_2):
     Returns:
         dydt: vector of the derivatives of the variables
     """
+    from .mathematics import heaviside_analytical as hev
+
     S, I, R = y
     N = S + I + R
     if vac_rate * eff * (t_2 - t_1) > S:

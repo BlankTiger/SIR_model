@@ -5,21 +5,22 @@
 #   dict(__file__=activate_this_file),
 # )
 __requires__ = ["matplotlib==3.4.1", "PySimpleGUI==4.55.1"]
-from utils.models import SIR
 from utils.plots import plot_SIR
 from utils.validation import (
     validate_positive_float_input,
     validate_positive_int_input,
 )
+from utils.mathematics import solve_SIR
+from utils.drawing import (
+    create_updated_fig_SIR,
+    create_updated_fig_SIR_with_vaccination,
+    delete_figure_agg,
+    draw_fig,
+)
+from utils.gui import layout
 import pkg_resources
 import PySimpleGUI as sg
 import numpy as np
-from scipy.integrate import odeint
-from matplotlib.backends.backend_tkagg import (
-    FigureCanvasTkAgg,
-    NavigationToolbar2Tk,
-)
-import matplotlib
 import platform
 
 
@@ -32,16 +33,11 @@ if platform.system() == "Windows":
         ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
 
-matplotlib.use("TkAgg")
-
-
-#################
 # Default values and initial plot
-#################
-beta = 0.5
-gamma = 0.05
+beta = 0.25
+gamma = 0.125
 
-S0 = 1000000
+S0 = 10000
 I0 = 10
 R0 = 0
 y0 = [S0, I0, R0]
@@ -50,162 +46,24 @@ t_1 = 100
 t_values = np.linspace(0, t_1, 100)
 
 # Solve the ODEs
-y_values = odeint(SIR, y0, t_values, args=(beta, gamma))
+y_values = solve_SIR(y0, t_values, beta, gamma)
 
 # Plot the solution
 fig = plot_SIR(y_values, t_values, beta, gamma)
-#################
+
 # GUI
-#################
 sg.theme("DarkGrey5")
+with_vaccinations = False
 
-column1 = sg.Column(
-    [
-        [
-            sg.Text("Susceptible", size=(10, 1)),
-            sg.Stretch(),
-            sg.InputText(
-                f"{int(S0)}",
-                size=(20, 1),
-                justification="right",
-                key="susceptible",
-            ),
-        ],
-        [
-            sg.Text("Infected", size=(10, 1)),
-            sg.Stretch(),
-            sg.InputText(
-                f"{int(I0)}",
-                size=(20, 1),
-                justification="right",
-                key="infected",
-            ),
-        ],
-        [
-            sg.Text("Recovered", size=(10, 1)),
-            sg.Stretch(),
-            sg.InputText(
-                f"{int(R0)}",
-                size=(20, 1),
-                justification="right",
-                key="recovered",
-            ),
-        ],
-        [
-            sg.Text("Duration", size=(10, 1)),
-            sg.Stretch(),
-            sg.InputText(
-                f"{t_1}", size=(20, 1), justification="right", key="duration"
-            ),
-        ],
-        [
-            sg.Text("β", size=(10, 1)),
-            sg.Stretch(),
-            sg.InputText(
-                f"{beta}",
-                size=(20, 1),
-                justification="right",
-                key="beta",
-            ),
-        ],
-        [
-            sg.Text("Recovery time", size=(13, 1)),
-            sg.Stretch(),
-            sg.InputText(
-                f"{round(1/gamma, 3)}",
-                size=(20, 1),
-                justification="right",
-                key="recovery_time",
-            ),
-        ],
-        [sg.Button("Draw", key="-DRAW-", size=(15, 2))],
-    ],
-    element_justification="c",
-    expand_x=True,
-)
-
-column2 = sg.Column(
-    [
-        [
-            sg.Canvas(
-                key="-CANVAS-",
-                size=(768, 576),
-                background_color="white",
-                expand_y=True,
-                expand_x=True,
-            )
-        ],
-        [
-            sg.Canvas(
-                key="-TOOLBAR-",
-                size=(768, 30),
-                background_color="white",
-                expand_x=True,
-            )
-        ],
-    ],
-    expand_y=True,
-    expand_x=True,
-)
 
 window = sg.Window(
     title="SIR model",
-    layout=[
-        [
-            column1,
-            column2,
-        ],
-    ],
+    layout=layout,
     element_justification="c",
     resizable=True,
     finalize=True,
 )
 window.TKroot.tk.call("tk", "scaling", 3)
-
-
-class Toolbar(NavigationToolbar2Tk):
-    def __init__(self, *args, **kwargs):
-        super(Toolbar, self).__init__(*args, **kwargs)
-
-
-#################
-# Drawing functions
-#################
-def draw_fig(canvas, fig, canvas_toolbar):
-    if canvas.children:
-        for child in canvas.winfo_children():
-            child.destroy()
-    if canvas_toolbar.children:
-        for child in canvas_toolbar.winfo_children():
-            child.destroy()
-    figure_canvas_agg = FigureCanvasTkAgg(fig, canvas)
-    figure_canvas_agg.draw()
-    toolbar = Toolbar(figure_canvas_agg, canvas_toolbar)
-    toolbar.update()
-    figure_canvas_agg.get_tk_widget().pack(
-        side="top", fill="both", expand=True
-    )
-    return figure_canvas_agg
-
-
-def update_canvas(canvas, fig):
-    figure_canvas_agg = draw_fig(canvas, fig)
-    return figure_canvas_agg
-
-
-def delete_figure_agg(figure_canvas_agg):
-    for item in figure_canvas_agg.get_tk_widget().find_all():
-        figure_canvas_agg.get_tk_widget().delete(item)
-    figure_canvas_agg.get_tk_widget().pack_forget()
-
-
-def create_updated_fig(susceptible, infected, recovered, beta, gamma, t_1):
-    t_values = np.linspace(0, t_1, int(t_1) * 100)
-    y_values = odeint(
-        SIR, [susceptible, infected, recovered], t_values, args=(beta, gamma)
-    )
-    fig = plot_SIR(y_values, t_values, beta, gamma)
-    return fig
 
 
 # Insert initial figure into canvas
@@ -214,14 +72,62 @@ fig_agg = draw_fig(
 )
 
 
-#################
 # Main loop
-#################
 while True:
     event, values = window.read()
     if event in (None, "Exit"):
         break
-    if event == "-DRAW-":
+    if event == "with_vaccinations":
+        with_vaccinations = not with_vaccinations
+        window["vaccination_rate_row"].update(visible=with_vaccinations)
+        window["vaccination_eff_row"].update(visible=with_vaccinations)
+        window["vaccination_start_row"].update(visible=with_vaccinations)
+        window["vaccination_end_row"].update(visible=with_vaccinations)
+    if event == "-DRAW-" and with_vaccinations:
+        delete_figure_agg(fig_agg)
+        if (
+            validate_positive_int_input(values["susceptible"])
+            and validate_positive_int_input(values["infected"])
+            and validate_positive_int_input(values["recovered"])
+            and validate_positive_float_input(values["beta"])
+            and validate_positive_float_input(values["recovery_time"])
+            and validate_positive_float_input(values["duration"])
+            and validate_positive_int_input(values["vaccination_rate"])
+            and validate_positive_float_input(values["vaccination_eff"])
+            and validate_positive_int_input(values["vaccination_start"])
+            and validate_positive_int_input(values["vaccination_end"])
+        ):
+            susceptible = float(values["susceptible"])
+            infected = float(values["infected"])
+            recovered = float(values["recovered"])
+
+            t_1 = float(values["duration"])
+            beta = float(values["beta"])
+            gamma = 1 / float(values["recovery_time"])
+
+            vaccination_rate = int(values["vaccination_rate"])
+            vaccination_eff = float(values["vaccination_eff"])
+            vaccination_start = int(values["vaccination_start"])
+            vaccination_end = int(values["vaccination_end"])
+
+            fig = create_updated_fig_SIR_with_vaccination(
+                susceptible,
+                infected,
+                recovered,
+                t_1,
+                beta,
+                gamma,
+                vaccination_rate,
+                vaccination_eff,
+                vaccination_start,
+                vaccination_end,
+            )
+            fig_agg = draw_fig(
+                window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanvas
+            )
+        else:
+            sg.popup_error("Invalid input", title="Error")
+    elif event == "-DRAW-":
         delete_figure_agg(fig_agg)
         if (
             validate_positive_int_input(values["susceptible"])
@@ -238,8 +144,8 @@ while True:
             t_1 = float(values["duration"])
             beta = float(values["beta"])
             gamma = 1 / float(values["recovery_time"])
-            fig = create_updated_fig(
-                susceptible, infected, recovered, beta, gamma, t_1
+            fig = create_updated_fig_SIR(
+                susceptible, infected, recovered, t_1, beta, gamma
             )
             fig_agg = draw_fig(
                 window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanvas
