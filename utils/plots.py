@@ -3,30 +3,6 @@ from matplotlib import pyplot as plt
 import matplotlib.patches as mpatches
 
 
-def validate_positive_int_input(value):
-    try:
-        value = int(value)
-        if value < 0:
-            raise ValueError
-        return True
-    except ValueError:
-        return False
-
-
-def validate_positive_float_input(value):
-    try:
-        value = float(value)
-        if value < 0:
-            raise ValueError
-        return True
-    except ValueError:
-        return False
-
-
-def heaviside_analytical(t, tau):
-    return 1 / (1 + np.exp(-40 * (t - tau)))
-
-
 def plot_SIR(y, t, beta, gamma):
     """ """
     plt.gcf()

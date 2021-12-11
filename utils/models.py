@@ -1,4 +1,4 @@
-from tooling import heaviside_analytical as hev
+from .mathematics import heaviside_analytical as hev
 
 
 def SIR(y, t, beta, gamma):

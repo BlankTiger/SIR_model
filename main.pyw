@@ -5,9 +5,9 @@
 #   dict(__file__=activate_this_file),
 # )
 __requires__ = ["matplotlib==3.4.1", "PySimpleGUI==4.55.1"]
-from models import SIR
-from tooling import (
-    plot_SIR,
+from utils.models import SIR
+from utils.plots import plot_SIR
+from utils.validation import (
     validate_positive_float_input,
     validate_positive_int_input,
 )
