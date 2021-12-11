@@ -5,6 +5,12 @@
 #   dict(__file__=activate_this_file),
 # )
 __requires__ = ["matplotlib==3.4.1", "PySimpleGUI==4.55.1"]
+from models import SIR
+from tooling import (
+    plot_SIR,
+    validate_positive_float_input,
+    validate_positive_int_input,
+)
 import pkg_resources
 import PySimpleGUI as sg
 import numpy as np
@@ -13,9 +19,7 @@ from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg,
     NavigationToolbar2Tk,
 )
-import matplotlib.pyplot as plt
 import matplotlib
-import matplotlib.patches as mpatches
 import platform
 
 
@@ -29,65 +33,6 @@ if platform.system() == "Windows":
 
 
 matplotlib.use("TkAgg")
-
-
-def SIR(y, t, beta, gamma):
-    """
-    Function modeling a SIR model.
-
-    Args:
-        t: time
-        y: vector of the variables
-
-    Returns:
-        dydt: vector of the derivatives of the variables
-    """
-    S, I, R = y
-    N = S + I + R
-    dydt = [-beta * S * I / N, beta * S * I / N - gamma * I, gamma * I]
-    return dydt
-
-
-
-def plot_SIR(y, t, beta, gamma):
-    """
-    Function to plot the SIR model.
-
-    Args:
-        S: vector of susceptible individuals
-        I: vector of infected individuals
-        R: vector of recovered individuals
-        t: time
-        a: rate of recovery
-        r: rate of infection
-    """
-    plt.gcf()
-    plt.style.use("fivethirtyeight")
-    plt.rcParams.update({"font.size": 13})
-    np.set_printoptions(suppress=True)
-    S, I, R = y[:, 0], y[:, 1], y[:, 2]
-    figure = plt.figure()
-    dpi = figure.get_dpi()
-    figure.set_figwidth(768 / dpi)
-    figure.set_figheight(576 / dpi)
-    plt.plot(t, S, label="Susceptible")
-    plt.plot(t, I, label="Infected")
-    plt.plot(t, R, label="Recovered")
-    gamma_text = (
-        "$γ = \\frac{1}{\\mathtt{recovery\\;time}} = "
-        + str(round(gamma, 3))
-        + "$"
-    )
-    r_0_text = "$R_0 = \\frac{β}{γ}=" + str(round(beta / gamma, 3)) + "$"
-    plt.ticklabel_format(axis="y", useOffset=False, style="Plain")
-    plt.xlabel("Time [days]")
-    plt.ylabel("Number of people")
-    handles, labels = plt.gca().get_legend_handles_labels()
-    handles.append(mpatches.Patch(color="none", label=gamma_text))
-    handles.append(mpatches.Patch(color="none", label=r_0_text))
-    plt.legend(handles=handles)
-    plt.tight_layout()
-    return figure
 
 
 #################
@@ -261,29 +206,6 @@ def create_updated_fig(susceptible, infected, recovered, beta, gamma, t_1):
     )
     fig = plot_SIR(y_values, t_values, beta, gamma)
     return fig
-
-
-#################
-# Validation functions
-#################
-def validate_positive_int_input(value):
-    try:
-        value = int(value)
-        if value < 0:
-            raise ValueError
-        return True
-    except ValueError:
-        return False
-
-
-def validate_positive_float_input(value):
-    try:
-        value = float(value)
-        if value < 0:
-            raise ValueError
-        return True
-    except ValueError:
-        return False
 
 
 # Insert initial figure into canvas
