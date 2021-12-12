@@ -4,7 +4,7 @@ from .models import SIR, SIR_with_vaccination
 
 
 def heaviside_analytical(t, tau):
-    return 1 / (1 + np.exp(-20 * (t - tau)))
+    return 1 / (1 + np.exp(-5 * (t - tau)))
 
 
 def solve_SIR(y0, t_values, beta, gamma):

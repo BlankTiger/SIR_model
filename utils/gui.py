@@ -255,7 +255,7 @@ column2 = sg.Column(
         [
             sg.Canvas(
                 key="-CANVAS-",
-                size=(768, 576),
+                size=(1000, 800),
                 background_color="white",
                 expand_y=True,
                 expand_x=True,
@@ -264,7 +264,7 @@ column2 = sg.Column(
         [
             sg.Canvas(
                 key="-TOOLBAR-",
-                size=(768, 30),
+                size=(1000, 30),
                 background_color="white",
                 expand_x=True,
             )

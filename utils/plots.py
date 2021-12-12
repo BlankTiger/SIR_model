@@ -25,8 +25,8 @@ def plot_SIR(y, t, beta, gamma):
     S, I, R = y[:, 0], y[:, 1], y[:, 2]
     figure = plt.figure()
     dpi = figure.get_dpi()
-    figure.set_figwidth(768 / dpi)
-    figure.set_figheight(576 / dpi)
+    figure.set_figwidth(1000 / dpi)
+    figure.set_figheight(800 / dpi)
     plt.plot(t, S, color=colors[0], label="Susceptible")
     plt.plot(t, I, color=colors[4], label="Infected")
     plt.plot(t, R, color=colors[6], label="Recovered")
@@ -56,14 +56,14 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
     S_v, I_v, R_v = y_v[:, 0], y_v[:, 1], y_v[:, 2]
     figure = plt.figure()
     dpi = figure.get_dpi()
-    figure.set_figwidth(768 / dpi)
-    figure.set_figheight(576 / dpi)
+    figure.set_figwidth(1000 / dpi)
+    figure.set_figheight(800 / dpi)
     plt.plot(t, S, color=colors[0], label="Susceptible")
     plt.plot(t, I, color=colors[4], label="Infected")
     plt.plot(t, R, color=colors[6], label="Recovered")
-    plt.plot(t, S_v, "--", color=colors[1], label="Susceptible (vaccinated)")
-    plt.plot(t, I_v, "--", color=colors[5], label="Infected (vaccinated)")
-    plt.plot(t, R_v, "--", color=colors[7], label="Recovered (vaccinated)")
+    plt.plot(t, S_v, "--", color=colors[1], label="Susceptible (v)")
+    plt.plot(t, I_v, "--", color=colors[5], label="Infected (v)")
+    plt.plot(t, R_v, "--", color=colors[7], label="Recovered (v)")
     gamma_text = (
         "$γ = \\frac{1}{\\mathtt{recovery\\;time}} = "
         + str(round(gamma, 3))
@@ -76,6 +76,6 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
     handles, labels = plt.gca().get_legend_handles_labels()
     handles.append(mpatches.Patch(color="none", label=gamma_text))
     handles.append(mpatches.Patch(color="none", label=r_0_text))
-    plt.legend(handles=handles)
+    plt.legend(handles=handles, handlelength=3)
     plt.tight_layout()
     return figure
