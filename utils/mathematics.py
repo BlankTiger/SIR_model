@@ -20,3 +20,9 @@ def solve_SIR_with_vaccination(
         t_values,
         args=(beta, gamma, vac_rate, eff, t_start, t_end),
     )
+
+
+def find_max_and_argmax(x, y):
+    max_y = np.max(y)
+    max_x = x[np.argmax(y)]
+    return max_x, max_y
