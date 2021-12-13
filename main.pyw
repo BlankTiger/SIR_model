@@ -1,9 +1,3 @@
-# #!Scripts/python
-# activate_this_file = "Scripts/activate_this.py"
-# exec(
-#   compile(open(activate_this_file, "rb").read(), activate_this_file, "exec"),
-#   dict(__file__=activate_this_file),
-# )
 __requires__ = ["matplotlib==3.4.1", "PySimpleGUI==4.55.1"]
 from utils.plots import plot_SIR
 from utils.validation import (
