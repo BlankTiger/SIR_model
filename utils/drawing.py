@@ -43,7 +43,11 @@ def delete_figure_agg(figure_canvas_agg):
 def create_updated_fig_SIR(susceptible, infected, recovered, t_1, beta, gamma):
     t_values = linspace(0, t_1, int(t_1) * 10)
     y_values = solve_SIR(
-        [susceptible, infected, recovered], t_values, beta, gamma
+        (0, t_1),
+        [susceptible, infected, recovered],
+        beta,
+        gamma,
+        t_values=t_values,
     )
     fig = plot_SIR(y_values, t_values, beta, gamma)
     return fig
@@ -63,17 +67,22 @@ def create_updated_fig_SIR_with_vaccination(
 ):
     t_values = linspace(0, t_1, int(t_1) * 10)
     y_values = solve_SIR(
-        [susceptible, infected, recovered], t_values, beta, gamma
+        (0, t_1),
+        [susceptible, infected, recovered],
+        beta,
+        gamma,
+        t_values=t_values,
     )
     y_with_vac_values = solve_SIR_with_vaccination(
+        (0, t_1),
         [susceptible, infected, recovered],
-        t_values,
         beta,
         gamma,
         vaccination_rate,
         eff,
         t_start,
         t_end,
+        t_values=t_values,
     )
     fig = plot_SIR_with_vaccination(
         y_values, y_with_vac_values, t_values, beta, gamma

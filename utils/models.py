@@ -1,4 +1,4 @@
-def SIR(y, t, beta, gamma):
+def SIR(t, y, beta, gamma):
     """
     Function modeling a SIR model.
 
@@ -12,12 +12,11 @@ def SIR(y, t, beta, gamma):
         dydt: vector of the derivatives of the variables
     """
     S, I, R = y
-    N = S + I + R
-    dydt = [-beta * S * I / N, beta * S * I / N - gamma * I, gamma * I]
+    dydt = [-beta * S * I, beta * S * I - gamma * I, gamma * I]
     return dydt
 
 
-def SIR_with_vaccination(y, t, beta, gamma, vac_rate, eff, t_1, t_2):
+def SIR_with_vaccination(t, y, beta, gamma, vac_rate, eff, t_1, t_2):
     """
     Function modeling a SIR model with vaccination.
 
@@ -37,12 +36,19 @@ def SIR_with_vaccination(y, t, beta, gamma, vac_rate, eff, t_1, t_2):
     from .mathematics import heaviside_analytical as hev
 
     S, I, R = y
-    N = S + I + R
-    if vac_rate * eff * (t_2 - t_1) > S:
-        t_2 = t_1 + S / vac_rate / eff
-    dydt = [
-        -beta * S * I / N - vac_rate * eff * hev(t, t_1) * (1 - hev(t, t_2)),
-        beta * S * I / N - gamma * I,
-        gamma * I + vac_rate * eff * hev(t, t_1) * (1 - hev(t, t_2)),
-    ]
+    # if vac_rate * eff * (t_2 - t_1) > S:
+    #     t_2 = t_1 + S / vac_rate / eff
+    dydt = []
+    if S - beta * S * I - vac_rate * eff * hev(t, t_1) * (1 - hev(t, t_2)) < 0:
+        dydt = [
+            -beta * S * I,
+            beta * S * I - gamma * I,
+            gamma * I,
+        ]
+    else:
+        dydt = [
+            -beta * S * I - vac_rate * eff * hev(t, t_1) * (1 - hev(t, t_2)),
+            beta * S * I - gamma * I,
+            gamma * I + vac_rate * eff * hev(t, t_1) * (1 - hev(t, t_2)),
+        ]
     return dydt

@@ -34,7 +34,7 @@ if platform.system() == "Windows":
 
 
 # Default values and initial plot
-beta = 0.25
+beta = 25e-6
 gamma = 0.125
 
 S0 = 10000
@@ -46,7 +46,7 @@ t_1 = 100
 t_values = np.linspace(0, t_1, 100)
 
 # Solve the ODEs
-y_values = solve_SIR(y0, t_values, beta, gamma)
+y_values = solve_SIR((0, t_1), y0, beta, gamma, t_values=t_values)
 
 # Plot the solution
 fig = plot_SIR(y_values, t_values, beta, gamma)

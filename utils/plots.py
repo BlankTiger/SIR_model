@@ -23,7 +23,7 @@ def plot_SIR(y, t, beta, gamma):
     plt.style.use("fivethirtyeight")
     plt.rcParams.update({"font.size": 13})
     np.set_printoptions(suppress=True)
-    S, I, R = y[:, 0], y[:, 1], y[:, 2]
+    S, I, R = y.y[0, :], y.y[1, :], y.y[2, :]
     max_x, max_y = find_max_and_argmax(t, I)
     figure = plt.figure()
     dpi = figure.get_dpi()
@@ -37,7 +37,11 @@ def plot_SIR(y, t, beta, gamma):
         + str(round(gamma, 3))
         + "$"
     )
-    r_0_text = "$R_0 = \\frac{β}{γ}=" + str(round(beta / gamma, 3)) + "$"
+    r_0_text = (
+        "$R_0 = \\frac{β\\cdot S(0)}{γ}="
+        + str(round(beta * S[0] / gamma, 3))
+        + "$"
+    )
     max_infected_text = (
         "$I_{\\mathrm{max}}(t) = "
         + str(int(round(max_y, 0)))
@@ -62,8 +66,8 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
     plt.style.use("fivethirtyeight")
     plt.rcParams.update({"font.size": 12})
     np.set_printoptions(suppress=True)
-    S, I, R = y[:, 0], y[:, 1], y[:, 2]
-    S_v, I_v, R_v = y_v[:, 0], y_v[:, 1], y_v[:, 2]
+    S, I, R = y.y[0, :], y.y[1, :], y.y[2, :]
+    S_v, I_v, R_v = y_v.y[0, :], y_v.y[1, :], y_v.y[2, :]
     max_x, max_y = find_max_and_argmax(t, I)
     max_x_v, max_y_v = find_max_and_argmax(t, I_v)
     figure = plt.figure()
@@ -81,7 +85,11 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
         + str(round(gamma, 3))
         + "$"
     )
-    r_0_text = "$R_0 = \\frac{β}{γ}=" + str(round(beta / gamma, 3)) + "$"
+    r_0_text = (
+        "$R_0 = \\frac{β\cdot S(0)}{γ}="
+        + str(round(beta * S[0] / gamma, 3))
+        + "$"
+    )
     max_infected_text = (
         "$I_{\\mathrm{max}}(t) = "
         + str(int(round(max_y, 0)))

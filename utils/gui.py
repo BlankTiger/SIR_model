@@ -75,7 +75,7 @@ duration_value = create_col_for_row(
 beta_text = create_col_for_row(sg.Text(text="β", size=(14, 1)))
 beta_value = create_col_for_row(
     sg.InputText(
-        "0.25",
+        "25e-6",
         size=(20, 1),
         justification="right",
         key="beta",
