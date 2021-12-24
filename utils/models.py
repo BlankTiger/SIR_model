@@ -36,10 +36,13 @@ def SIR_with_vaccination(t, y, beta, gamma, vac_rate, eff, t_1, t_2):
     from .mathematics import heaviside_analytical as hev
 
     S, I, R = y
-    # if vac_rate * eff * (t_2 - t_1) > S:
-    #     t_2 = t_1 + S / vac_rate / eff
     dydt = []
-    if S - beta * S * I - vac_rate * eff * hev(t, t_1) * (1 - hev(t, t_2)) < 0:
+    if S - vac_rate * eff * hev(t, t_1) * (1 - hev(t, t_2)) <= 0 and t < t_2:
+        dydt = [-S, beta * S * I - gamma * I, S + gamma * I]
+    elif (
+        S - beta * S * I - vac_rate * eff * hev(t, t_1) * (1 - hev(t, t_2))
+        <= 0
+    ):
         dydt = [
             -beta * S * I,
             beta * S * I - gamma * I,

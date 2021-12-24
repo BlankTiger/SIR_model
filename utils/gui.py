@@ -6,6 +6,11 @@ sg.theme("DarkGrey5")
 
 
 def create_stretch():
+    """Create a stretch element
+
+    Returns:
+        sg.Text: stretch element for layout
+    """
     return sg.Text(
         font="_ 1",
         text="",
@@ -16,10 +21,31 @@ def create_stretch():
 
 
 def create_col_for_row(elem):
+    """Create a column for a row
+
+    Args:
+        elem (sg.Element): element to be placed in the column
+
+    Returns:
+        sg.Column: column for a row
+    """
     return sg.Column([[elem]], pad=(0, 0))
 
 
 def create_row(col_1, col_2, col_3, row_visible, row_key=""):
+    """Create a row
+
+
+    Args:
+        col_1 (sg.Column): first column of the row
+        col_2 (sg.Column): second column of the row
+        col_3 (sg.Column): third column of the row
+        row_visible (bool): whether the row is visible or not
+        row_key (str): key of the row
+
+    Returns:
+        sg.Column: row
+    """
     return sg.Column(
         [[col_1, col_2, col_3]],
         pad=(0, 0),
@@ -30,6 +56,15 @@ def create_row(col_1, col_2, col_3, row_visible, row_key=""):
 
 
 def create_layout(*elements):
+    """Create a layout
+
+
+    Args:
+        *elements (sg.Element): elements to be placed in the layout
+
+    Returns:
+        list: layout
+    """
     return [[*elements]]
 
 
@@ -145,7 +180,9 @@ vac_end_value = create_col_for_row(
 
 with_vaccinations_row = create_row(
     create_stretch(),
-    sg.Button("With Vaccinations", key="with_vaccinations"),
+    sg.Checkbox(
+        "Vaccinations on/off", enable_events=True, key="with_vaccinations"
+    ),
     create_stretch(),
     True,
 )
@@ -226,7 +263,7 @@ vac_end_row = create_row(
 
 draw_row = create_row(
     create_stretch(),
-    sg.Button("Draw", key="-DRAW-", size=(15, 2)),
+    sg.Button("Plot", key="-DRAW-", size=(15, 2)),
     create_stretch(),
     True,
 )

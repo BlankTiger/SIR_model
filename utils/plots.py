@@ -18,7 +18,17 @@ colors = [
 
 
 def plot_SIR(y, t, beta, gamma):
-    """ """
+    """Plot SIR model
+
+    Args:
+        y (scipy.integrate._ivp.ivp.OdeResult): solution of the ODE
+        t (array): time array
+        beta (float): infection rate
+        gamma (float): recovery rate
+
+    Returns:
+        figure: figure object
+    """
     plt.gcf()
     plt.style.use("fivethirtyeight")
     plt.rcParams.update({"font.size": 13})
@@ -62,6 +72,19 @@ def plot_SIR(y, t, beta, gamma):
 
 
 def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
+    """Plot SIR model with vaccination
+
+    Args:
+        y (scipy.integrate._ivp.ivp.OdeResult): solution of the ODE
+        y_v (scipy.integrate._ivp.ivp.OdeResult): solution of the ODE with
+            vaccination
+        t (array): time array
+        beta (float): infection rate
+        gamma (float): recovery rate
+
+    Returns:
+        figure: figure object
+    """
     plt.gcf()
     plt.style.use("fivethirtyeight")
     plt.rcParams.update({"font.size": 12})
