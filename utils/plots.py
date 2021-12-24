@@ -127,18 +127,17 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
         + str(int(round(max_x_v, 0)))
         + "}$"
     )
-    additional_text = (
-        gamma_text,
-        r_0_text,
-        max_infected_text,
-        max_infected_v_text,
-    )
+    additional_text = (gamma_text, r_0_text, max_infected_text, "")
     plt.ticklabel_format(axis="y", useOffset=False, style="Plain")
     plt.xlabel("Time [days]")
     plt.ylabel("Number of people")
     handles, labels = plt.gca().get_legend_handles_labels()
     for text in additional_text:
         handles.append(mpatches.Patch(color="none", label=text))
+    # move elements of index 3, 4, 5 to the end of the list
+    for i in range(3, 6):
+        handles.append(handles.pop(3))
+    handles.append(mpatches.Patch(color="none", label=max_infected_v_text))
     plt.legend(handles=handles, handlelength=3)
     plt.tight_layout()
     return figure
