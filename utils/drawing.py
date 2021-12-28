@@ -65,12 +65,14 @@ def delete_figure_agg(figure_canvas_agg):
     figure_canvas_agg.get_tk_widget().pack_forget()
 
 
-def create_updated_fig_SIR(susceptible, infected, recovered, t_1, beta, gamma):
+def create_updated_fig_SIR(
+    susceptible, infectious, recovered, t_1, beta, gamma
+):
     """Creates a new figure with the updated SIR values
 
     Args:
         susceptible (int): The susceptible population
-        infected (int): The infected population
+        infectious (int): The infectious population
         recovered (int): The recovered population
         t_1 (float): The time of the simulation
         beta (float): The infection rate
@@ -82,7 +84,7 @@ def create_updated_fig_SIR(susceptible, infected, recovered, t_1, beta, gamma):
     t_values = linspace(0, t_1, int(t_1) * 10)
     y_values = solve_SIR(
         (0, t_1),
-        [susceptible, infected, recovered],
+        [susceptible, infectious, recovered],
         beta,
         gamma,
         t_values=t_values,
@@ -93,7 +95,7 @@ def create_updated_fig_SIR(susceptible, infected, recovered, t_1, beta, gamma):
 
 def create_updated_fig_SIR_with_vaccination(
     susceptible,
-    infected,
+    infectious,
     recovered,
     t_1,
     beta,
@@ -107,7 +109,7 @@ def create_updated_fig_SIR_with_vaccination(
 
     Args:
         susceptible (int): The susceptible population
-        infected (int): The infected population
+        infectious (int): The infectious population
         recovered (int): The recovered population
         t_1 (float): The time of the simulation
         beta (float): The infection rate
@@ -124,14 +126,14 @@ def create_updated_fig_SIR_with_vaccination(
     t_values = linspace(0, t_1, int(t_1) * 10)
     y_values = solve_SIR(
         (0, t_1),
-        [susceptible, infected, recovered],
+        [susceptible, infectious, recovered],
         beta,
         gamma,
         t_values=t_values,
     )
     y_with_vac_values = solve_SIR_with_vaccination(
         (0, t_1),
-        [susceptible, infected, recovered],
+        [susceptible, infectious, recovered],
         beta,
         gamma,
         vaccination_rate,

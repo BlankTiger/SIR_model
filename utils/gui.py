@@ -77,13 +77,13 @@ susceptible_value = create_col_for_row(
     )
 )
 
-infected_text = create_col_for_row(sg.Text(text="Infected", size=(14, 1)))
-infected_value = create_col_for_row(
+infectious_text = create_col_for_row(sg.Text(text="Infectious", size=(14, 1)))
+infectious_value = create_col_for_row(
     sg.InputText(
         "10",
         size=(20, 1),
         justification="right",
-        key="infected",
+        key="infectious",
     )
 )
 
@@ -194,10 +194,10 @@ susceptible_row = create_row(
     True,
 )
 
-infected_row = create_row(
-    infected_text,
+infectious_row = create_row(
+    infectious_text,
     create_stretch(),
-    infected_value,
+    infectious_value,
     True,
 )
 
@@ -272,7 +272,7 @@ column1 = sg.Column(
     [
         [with_vaccinations_row],
         [susceptible_row],
-        [infected_row],
+        [infectious_row],
         [recovered_row],
         [duration_row],
         [beta_row],

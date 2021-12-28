@@ -82,7 +82,7 @@ while True:
         delete_figure_agg(fig_agg)
         if (
             validate_positive_int_input(values["susceptible"])
-            and validate_positive_int_input(values["infected"])
+            and validate_positive_int_input(values["infectious"])
             and validate_positive_int_input(values["recovered"])
             and validate_positive_float_input(values["beta"])
             and validate_positive_float_input(values["recovery_time"])
@@ -93,7 +93,7 @@ while True:
             and validate_positive_int_input(values["vaccination_end"])
         ):
             susceptible = float(values["susceptible"])
-            infected = float(values["infected"])
+            infectious = float(values["infectious"])
             recovered = float(values["recovered"])
 
             t_1 = float(values["duration"])
@@ -107,7 +107,7 @@ while True:
 
             fig = create_updated_fig_SIR_with_vaccination(
                 susceptible,
-                infected,
+                infectious,
                 recovered,
                 t_1,
                 beta,
@@ -126,21 +126,21 @@ while True:
         delete_figure_agg(fig_agg)
         if (
             validate_positive_int_input(values["susceptible"])
-            and validate_positive_int_input(values["infected"])
+            and validate_positive_int_input(values["infectious"])
             and validate_positive_int_input(values["recovered"])
             and validate_positive_float_input(values["beta"])
             and validate_positive_float_input(values["recovery_time"])
             and validate_positive_float_input(values["duration"])
         ):
             susceptible = float(values["susceptible"])
-            infected = float(values["infected"])
+            infectious = float(values["infectious"])
             recovered = float(values["recovered"])
 
             t_1 = float(values["duration"])
             beta = float(values["beta"])
             gamma = 1 / float(values["recovery_time"])
             fig = create_updated_fig_SIR(
-                susceptible, infected, recovered, t_1, beta, gamma
+                susceptible, infectious, recovered, t_1, beta, gamma
             )
             fig_agg = draw_fig(
                 window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanvas
