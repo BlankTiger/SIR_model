@@ -58,13 +58,11 @@ window = sg.Window(
     resizable=True,
     finalize=True,
 )
-window.TKroot.tk.call("tk", "scaling", 3)
+# window.TKroot.tk.call("tk", "scaling", 3)
 
 
 # Insert initial figure into canvas
-fig_agg = draw_fig(
-    window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanvas
-)
+fig_agg = draw_fig(window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanvas)
 
 
 # Main loop

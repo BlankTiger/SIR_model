@@ -33,9 +33,7 @@ def draw_fig(canvas, fig, canvas_toolbar):
     figure_canvas_agg.draw()
     toolbar = Toolbar(figure_canvas_agg, canvas_toolbar)
     toolbar.update()
-    figure_canvas_agg.get_tk_widget().pack(
-        side="top", fill="both", expand=True
-    )
+    figure_canvas_agg.get_tk_widget().pack(side="top", fill="both", expand=True)
     return figure_canvas_agg
 
 
@@ -65,9 +63,7 @@ def delete_figure_agg(figure_canvas_agg):
     figure_canvas_agg.get_tk_widget().pack_forget()
 
 
-def create_updated_fig_SIR(
-    susceptible, infectious, recovered, t_1, beta, gamma
-):
+def create_updated_fig_SIR(susceptible, infectious, recovered, t_1, beta, gamma):
     """Creates a new figure with the updated SIR values
 
     Args:
@@ -83,11 +79,7 @@ def create_updated_fig_SIR(
     """
     t_values = linspace(0, t_1, int(t_1) * 10)
     y_values = solve_SIR(
-        (0, t_1),
-        [susceptible, infectious, recovered],
-        beta,
-        gamma,
-        t_values=t_values,
+        (0, t_1), [susceptible, infectious, recovered], beta, gamma, t_values=t_values
     )
     fig = plot_SIR(y_values, t_values, beta, gamma)
     return fig
@@ -125,11 +117,7 @@ def create_updated_fig_SIR_with_vaccination(
     """
     t_values = linspace(0, t_1, int(t_1) * 10)
     y_values = solve_SIR(
-        (0, t_1),
-        [susceptible, infectious, recovered],
-        beta,
-        gamma,
-        t_values=t_values,
+        (0, t_1), [susceptible, infectious, recovered], beta, gamma, t_values=t_values
     )
     y_with_vac_values = solve_SIR_with_vaccination(
         (0, t_1),
@@ -142,7 +130,5 @@ def create_updated_fig_SIR_with_vaccination(
         t_end,
         t_values=t_values,
     )
-    fig = plot_SIR_with_vaccination(
-        y_values, y_with_vac_values, t_values, beta, gamma
-    )
+    fig = plot_SIR_with_vaccination(y_values, y_with_vac_values, t_values, beta, gamma)
     return fig
