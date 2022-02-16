@@ -64,52 +64,87 @@ def create_layout(*elements):
     return [[*elements]]
 
 
-susceptible_text = create_col_for_row(sg.Text(text="Susceptible", size=(14, 1)))
+susceptible_text = create_col_for_row(sg.Text(text="Susceptible", size=(17, 1)))
 susceptible_value = create_col_for_row(
     sg.InputText("10000", size=(20, 1), justification="right", key="susceptible")
 )
 
-infectious_text = create_col_for_row(sg.Text(text="Infectious", size=(14, 1)))
+infectious_text = create_col_for_row(sg.Text(text="Infectious", size=(17, 1)))
 infectious_value = create_col_for_row(
     sg.InputText("10", size=(20, 1), justification="right", key="infectious")
 )
 
-recovered_text = create_col_for_row(sg.Text(text="Recovered", size=(14, 1)))
+recovered_text = create_col_for_row(sg.Text(text="Recovered", size=(17, 1)))
 recovered_value = create_col_for_row(
     sg.InputText("0", size=(20, 1), justification="right", key="recovered")
 )
 
-duration_text = create_col_for_row(sg.Text(text="Duration", size=(14, 1)))
+duration_text = create_col_for_row(sg.Text(text="Duration", size=(17, 1)))
 duration_value = create_col_for_row(
     sg.InputText("100", size=(20, 1), justification="right", key="duration")
 )
 
-beta_text = create_col_for_row(sg.Text(text="β", size=(14, 1)))
+beta_text = create_col_for_row(sg.Text(text="β", size=(17, 1)))
 beta_value = create_col_for_row(
     sg.InputText("25e-6", size=(20, 1), justification="right", key="beta")
 )
 
-recovery_time_text = create_col_for_row(sg.Text(text="Recovery time", size=(14, 1)))
+recovery_time_text = create_col_for_row(sg.Text(text="Recovery time", size=(17, 1)))
 recovery_time_value = create_col_for_row(
     sg.InputText("8", size=(20, 1), justification="right", key="recovery_time")
 )
 
-vac_rate_text = create_col_for_row(sg.Text(text="Vaccination rate", size=(14, 1)))
+sw_a_text = create_col_for_row(sg.Text(text="Immunity loss rate", size=(17, 1)))
+sw_a_value = create_col_for_row(
+    sg.InputText("0.01", size=(20, 1), justification="right", key="sw_a")
+)
+
+sw_start_text = create_col_for_row(sg.Text(text="Start of immunity loss", size=(17, 1)))
+sw_start_value = create_col_for_row(
+    sg.InputText("0", size=(20, 1), justification="right", key="sw_start")
+)
+
+
+with_multiwave_row = create_row(
+    create_stretch(),
+    sg.Checkbox("Multiwave on/off", key="with_multiwave", enable_events=True),
+    create_stretch(),
+    True,
+)
+
+sw_a_row = create_row(
+    sw_a_text,
+    create_stretch(),
+    sw_a_value,
+    False,
+    "sw_a_row",
+)
+
+sw_start_row = create_row(
+    sw_start_text,
+    create_stretch(),
+    sw_start_value,
+    False,
+    "sw_start_row",
+)
+
+
+vac_rate_text = create_col_for_row(sg.Text(text="Vaccination rate", size=(17, 1)))
 vac_rate_value = create_col_for_row(
     sg.InputText("250", size=(20, 1), justification="right", key="vaccination_rate")
 )
 
-vac_eff_text = create_col_for_row(sg.Text(text="Vaccination eff", size=(14, 1)))
+vac_eff_text = create_col_for_row(sg.Text(text="Vaccination eff", size=(17, 1)))
 vac_eff_value = create_col_for_row(
     sg.InputText("0.9", size=(20, 1), justification="right", key="vaccination_eff")
 )
 
-vac_start_text = create_col_for_row(sg.Text(text="Vaccination start", size=(14, 1)))
+vac_start_text = create_col_for_row(sg.Text(text="Vaccination start", size=(17, 1)))
 vac_start_value = create_col_for_row(
     sg.InputText("30", size=(20, 1), justification="right", key="vaccination_start")
 )
 
-vac_end_text = create_col_for_row(sg.Text(text="Vaccination end", size=(14, 1)))
+vac_end_text = create_col_for_row(sg.Text(text="Vaccination end", size=(17, 1)))
 vac_end_value = create_col_for_row(
     sg.InputText("50", size=(20, 1), justification="right", key="vaccination_end")
 )
@@ -163,6 +198,7 @@ draw_row = create_row(
 
 column1 = sg.Column(
     [
+        [with_multiwave_row],
         [with_vaccinations_row],
         [susceptible_row],
         [infectious_row],
@@ -174,6 +210,8 @@ column1 = sg.Column(
         [vac_eff_row],
         [vac_start_row],
         [vac_end_row],
+        [sw_a_row],
+        [sw_start_row],
         [draw_row],
     ],
     element_justification="c",
@@ -194,9 +232,9 @@ column2 = sg.Column(
         [
             sg.Canvas(
                 key="-TOOLBAR-",
-                size=(1000, 30),
                 background_color="white",
                 expand_x=True,
+                expand_y=False,
             )
         ],
     ],

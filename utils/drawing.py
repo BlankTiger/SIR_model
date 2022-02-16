@@ -63,7 +63,9 @@ def delete_figure_agg(figure_canvas_agg):
     figure_canvas_agg.get_tk_widget().pack_forget()
 
 
-def create_updated_fig_SIR(susceptible, infectious, recovered, t_1, beta, gamma):
+def create_updated_fig_SIR(
+    susceptible, infectious, recovered, t_1, beta, gamma, with_multiwave, a, t_3
+):
     """Creates a new figure with the updated SIR values
 
     Args:
@@ -73,13 +75,23 @@ def create_updated_fig_SIR(susceptible, infectious, recovered, t_1, beta, gamma)
         t_1 (float): The time of the simulation
         beta (float): The infection rate
         gamma (float): The recovery rate
+        with_multiwave (bool): indicates if recovered people lose immunity
+        a (float): proportion of recovered people who lose immunity
+        t_3 (int): time of the start of immunity loss
 
     Returns:
         fig (matplotlib.figure): The figure with the updated SIR values
     """
     t_values = linspace(0, t_1, int(t_1) * 10)
     y_values = solve_SIR(
-        (0, t_1), [susceptible, infectious, recovered], beta, gamma, t_values=t_values
+        (0, t_1),
+        [susceptible, infectious, recovered],
+        beta,
+        gamma,
+        with_multiwave,
+        a,
+        t_3,
+        t_values=t_values,
     )
     fig = plot_SIR(y_values, t_values, beta, gamma)
     return fig
@@ -96,6 +108,9 @@ def create_updated_fig_SIR_with_vaccination(
     eff,
     t_start,
     t_end,
+    with_multiwave,
+    a,
+    t_3,
 ):
     """Creates a new figure with the updated SIR values with vaccination
 
@@ -110,6 +125,9 @@ def create_updated_fig_SIR_with_vaccination(
         eff (float): The efficacy of the vaccine
         t_start (float): The start time of vaccinations
         t_end (float): The final day of vaccinations
+        with_multiwave (bool): indicates if recovered people lose immunity
+        a (float): proportion of recovered people who lose immunity
+        t_3 (int): time of the start of immunity loss
 
     Returns:
         fig (matplotlib.figure): The figure with the updated SIR values with
@@ -117,7 +135,14 @@ def create_updated_fig_SIR_with_vaccination(
     """
     t_values = linspace(0, t_1, int(t_1) * 10)
     y_values = solve_SIR(
-        (0, t_1), [susceptible, infectious, recovered], beta, gamma, t_values=t_values
+        (0, t_1),
+        [susceptible, infectious, recovered],
+        beta,
+        gamma,
+        with_multiwave,
+        a,
+        t_3,
+        t_values=t_values,
     )
     y_with_vac_values = solve_SIR_with_vaccination(
         (0, t_1),
@@ -128,6 +153,9 @@ def create_updated_fig_SIR_with_vaccination(
         eff,
         t_start,
         t_end,
+        with_multiwave,
+        a,
+        t_3,
         t_values=t_values,
     )
     fig = plot_SIR_with_vaccination(y_values, y_with_vac_values, t_values, beta, gamma)

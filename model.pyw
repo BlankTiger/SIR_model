@@ -41,7 +41,7 @@ t_1 = 100
 t_values = linspace(0, t_1, 100)
 
 # Solve the ODEs
-y_values = solve_SIR((0, t_1), y0, beta, gamma, t_values=t_values)
+y_values = solve_SIR((0, t_1), y0, beta, gamma, False, 0, 0, t_values=t_values)
 
 # Plot the solution
 fig = plot_SIR(y_values, t_values, beta, gamma)
@@ -49,6 +49,7 @@ fig = plot_SIR(y_values, t_values, beta, gamma)
 # GUI
 sg.theme("DarkGrey5")
 with_vaccinations = False
+with_multiwave = False
 
 
 window = sg.Window(
@@ -58,6 +59,7 @@ window = sg.Window(
     resizable=True,
     finalize=True,
 )
+# this scaling is not needed in newer versions of python I think
 # window.TKroot.tk.call("tk", "scaling", 3)
 
 
@@ -76,6 +78,12 @@ while True:
         window["vaccination_eff_row"].update(visible=with_vaccinations)
         window["vaccination_start_row"].update(visible=with_vaccinations)
         window["vaccination_end_row"].update(visible=with_vaccinations)
+        window.visibility_changed()
+    if event == "with_multiwave":
+        with_multiwave = not with_multiwave
+        window["sw_a_row"].update(visible=with_multiwave)
+        window["sw_start_row"].update(visible=with_multiwave)
+        window.visibility_changed()
     if event == "-DRAW-" and with_vaccinations:
         delete_figure_agg(fig_agg)
         if (
@@ -85,6 +93,8 @@ while True:
             and validate_positive_float_input(values["beta"])
             and validate_positive_float_input(values["recovery_time"])
             and validate_positive_float_input(values["duration"])
+            and validate_positive_float_input(values["sw_a"])
+            and validate_positive_int_input(values["sw_start"])
             and validate_positive_int_input(values["vaccination_rate"])
             and validate_positive_float_input(values["vaccination_eff"])
             and validate_positive_int_input(values["vaccination_start"])
@@ -97,6 +107,9 @@ while True:
             t_1 = float(values["duration"])
             beta = float(values["beta"])
             gamma = 1 / float(values["recovery_time"])
+
+            sw_a = float(values["sw_a"])
+            sw_start = int(values["sw_start"])
 
             vaccination_rate = int(values["vaccination_rate"])
             vaccination_eff = float(values["vaccination_eff"])
@@ -114,6 +127,9 @@ while True:
                 vaccination_eff,
                 vaccination_start,
                 vaccination_end,
+                with_multiwave,
+                sw_a,
+                sw_start,
             )
             fig_agg = draw_fig(
                 window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanvas
@@ -129,6 +145,8 @@ while True:
             and validate_positive_float_input(values["beta"])
             and validate_positive_float_input(values["recovery_time"])
             and validate_positive_float_input(values["duration"])
+            and validate_positive_float_input(values["sw_a"])
+            and validate_positive_int_input(values["sw_start"])
         ):
             susceptible = float(values["susceptible"])
             infectious = float(values["infectious"])
@@ -137,8 +155,20 @@ while True:
             t_1 = float(values["duration"])
             beta = float(values["beta"])
             gamma = 1 / float(values["recovery_time"])
+
+            sw_a = float(values["sw_a"])
+            sw_start = int(values["sw_start"])
+
             fig = create_updated_fig_SIR(
-                susceptible, infectious, recovered, t_1, beta, gamma
+                susceptible,
+                infectious,
+                recovered,
+                t_1,
+                beta,
+                gamma,
+                with_multiwave,
+                sw_a,
+                sw_start,
             )
             fig_agg = draw_fig(
                 window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanvas

@@ -42,16 +42,7 @@ def plot_SIR(y, t, beta, gamma):
     plt.plot(t, S, color=colors[0], label="Susceptible")
     plt.plot(t, I, color=colors[4], label="Infectious")
     plt.plot(t, R, color=colors[6], label="Recovered")
-    gamma_text = (
-        "$γ = \\frac{1}{\\mathtt{recovery\\;time}} = "
-        + str(round(gamma, 3))
-        + "$"
-    )
-    r_0_text = (
-        "$R_0 = \\frac{β\\cdot S(0)}{γ}="
-        + str(round(beta * S[0] / gamma, 3))
-        + "$"
-    )
+    r_0_text = "$R_0 = " + str(round(beta * S[0] / gamma, 3)) + "$"
     max_infectious_text = (
         "$I_{\\mathrm{max}}(t) = "
         + str(int(round(max_y, 0)))
@@ -59,7 +50,7 @@ def plot_SIR(y, t, beta, gamma):
         + str(int(round(max_x, 0)))
         + "}$"
     )
-    additional_text = (gamma_text, r_0_text, max_infectious_text)
+    additional_text = (r_0_text, max_infectious_text)
     plt.ticklabel_format(axis="y", useOffset=False, style="Plain")
     plt.xlabel("Time [days]")
     plt.ylabel("Number of people")
@@ -87,7 +78,7 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
     """
     plt.gcf()
     plt.style.use("fivethirtyeight")
-    plt.rcParams.update({"font.size": 12})
+    plt.rcParams.update({"font.size": 13})
     np.set_printoptions(suppress=True)
     S, I, R = y.y[0, :], y.y[1, :], y.y[2, :]
     S_v, I_v, R_v = y_v.y[0, :], y_v.y[1, :], y_v.y[2, :]
@@ -103,16 +94,7 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
     plt.plot(t, S_v, "--", color=colors[1], label="Susceptible (v)")
     plt.plot(t, I_v, "--", color=colors[5], label="Infectious (v)")
     plt.plot(t, R_v, "--", color=colors[7], label="Recovered (v)")
-    gamma_text = (
-        "$γ = \\frac{1}{\\mathtt{recovery\\;time}} = "
-        + str(round(gamma, 3))
-        + "$"
-    )
-    r_0_text = (
-        "$R_0 = \\frac{β\cdot S(0)}{γ}="
-        + str(round(beta * S[0] / gamma, 3))
-        + "$"
-    )
+    r_0_text = "$R_0 = " + str(round(beta * S[0] / gamma, 3)) + "$"
     max_infectious_text = (
         "$I_{\\mathrm{max}}(t) = "
         + str(int(round(max_y, 0)))
@@ -127,15 +109,15 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
         + str(int(round(max_x_v, 0)))
         + "}$"
     )
-    additional_text = (gamma_text, r_0_text, max_infectious_text, "")
+    additional_text = (r_0_text, max_infectious_text, "")
     plt.ticklabel_format(axis="y", useOffset=False, style="Plain")
     plt.xlabel("Time [days]")
     plt.ylabel("Number of people")
-    handles, labels = plt.gca().get_legend_handles_labels()
+    handles, _ = plt.gca().get_legend_handles_labels()
     for text in additional_text:
         handles.append(mpatches.Patch(color="none", label=text))
     # move elements of index 3, 4, 5 to the end of the list
-    for i in range(3, 6):
+    for _ in range(3, 6):
         handles.append(handles.pop(3))
     handles.append(mpatches.Patch(color="none", label=max_infectious_v_text))
     plt.legend(handles=handles, handlelength=3)
