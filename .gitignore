@@ -9,3 +9,4 @@ build
 Include
 .pytest_cache
 model.spec
+.vimspector.json
