@@ -66,12 +66,12 @@ def create_layout(*elements):
 
 susceptible_text = create_col_for_row(sg.Text(text="Susceptible", size=(17, 1)))
 susceptible_value = create_col_for_row(
-    sg.InputText("10000", size=(20, 1), justification="right", key="susceptible")
+    sg.InputText("1000000", size=(20, 1), justification="right", key="susceptible")
 )
 
 infectious_text = create_col_for_row(sg.Text(text="Infectious", size=(17, 1)))
 infectious_value = create_col_for_row(
-    sg.InputText("10", size=(20, 1), justification="right", key="infectious")
+    sg.InputText("1", size=(20, 1), justification="right", key="infectious")
 )
 
 recovered_text = create_col_for_row(sg.Text(text="Recovered", size=(17, 1)))
@@ -81,17 +81,17 @@ recovered_value = create_col_for_row(
 
 duration_text = create_col_for_row(sg.Text(text="Duration", size=(17, 1)))
 duration_value = create_col_for_row(
-    sg.InputText("100", size=(20, 1), justification="right", key="duration")
+    sg.InputText("400", size=(20, 1), justification="right", key="duration")
 )
 
 beta_text = create_col_for_row(sg.Text(text="β", size=(17, 1)))
 beta_value = create_col_for_row(
-    sg.InputText("25e-6", size=(20, 1), justification="right", key="beta")
+    sg.InputText("4e-7", size=(20, 1), justification="right", key="beta")
 )
 
 recovery_time_text = create_col_for_row(sg.Text(text="Recovery time", size=(17, 1)))
 recovery_time_value = create_col_for_row(
-    sg.InputText("8", size=(20, 1), justification="right", key="recovery_time")
+    sg.InputText("5", size=(20, 1), justification="right", key="recovery_time")
 )
 
 sw_a_text = create_col_for_row(sg.Text(text="Immunity loss rate", size=(17, 1)))
@@ -101,7 +101,7 @@ sw_a_value = create_col_for_row(
 
 sw_start_text = create_col_for_row(sg.Text(text="Start of immunity loss", size=(17, 1)))
 sw_start_value = create_col_for_row(
-    sg.InputText("0", size=(20, 1), justification="right", key="sw_start")
+    sg.InputText("30", size=(20, 1), justification="right", key="sw_start")
 )
 
 

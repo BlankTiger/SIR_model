@@ -38,7 +38,7 @@ def solve_SIR(t_range, y0, beta, gamma, with_multiwave, a, t_3, t_values):
         t_range,
         y0,
         t_eval=t_values,
-        method="Radau",
+        method="DOP853",
         args=(beta, gamma, with_multiwave, a, t_3),
     )
 
@@ -83,6 +83,7 @@ def solve_SIR_with_vaccination(
         t_range,
         y0,
         t_eval=t_values,
+        method="DOP853",
         args=(beta, gamma, vac_rate, eff, t_start, t_end, with_multiwave, a, t_3),
     )
 

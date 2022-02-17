@@ -29,16 +29,16 @@ if platform.system() == "Windows":
 
 
 # Default values and initial plot
-beta = 25e-6
-gamma = 0.125
+beta = 4e-7
+gamma = 0.2
 
-S0 = 10000
-I0 = 10
+S0 = 1000000
+I0 = 1
 R0 = 0
 y0 = [S0, I0, R0]
 
-t_1 = 100
-t_values = linspace(0, t_1, 100)
+t_1 = 400
+t_values = linspace(0, t_1, 400)
 
 # Solve the ODEs
 y_values = solve_SIR((0, t_1), y0, beta, gamma, False, 0, 0, t_values=t_values)
@@ -87,31 +87,31 @@ while True:
     if event == "-DRAW-" and with_vaccinations:
         delete_figure_agg(fig_agg)
         if (
-            validate_positive_int_input(values["susceptible"])
-            and validate_positive_int_input(values["infectious"])
-            and validate_positive_int_input(values["recovered"])
+            validate_positive_float_input(values["susceptible"])
+            and validate_positive_float_input(values["infectious"])
+            and validate_positive_float_input(values["recovered"])
             and validate_positive_float_input(values["beta"])
-            and validate_positive_float_input(values["recovery_time"])
-            and validate_positive_float_input(values["duration"])
+            and validate_positive_int_input(values["recovery_time"])
+            and validate_positive_int_input(values["duration"])
             and validate_positive_float_input(values["sw_a"])
             and validate_positive_int_input(values["sw_start"])
-            and validate_positive_int_input(values["vaccination_rate"])
+            and validate_positive_float_input(values["vaccination_rate"])
             and validate_positive_float_input(values["vaccination_eff"])
             and validate_positive_int_input(values["vaccination_start"])
             and validate_positive_int_input(values["vaccination_end"])
         ):
-            susceptible = float(values["susceptible"])
-            infectious = float(values["infectious"])
-            recovered = float(values["recovered"])
+            susceptible = int(float(values["susceptible"]))
+            infectious = int(float(values["infectious"]))
+            recovered = int(float(values["recovered"]))
 
-            t_1 = float(values["duration"])
+            t_1 = int(values["duration"])
             beta = float(values["beta"])
-            gamma = 1 / float(values["recovery_time"])
+            gamma = 1 / int(values["recovery_time"])
 
             sw_a = float(values["sw_a"])
             sw_start = int(values["sw_start"])
 
-            vaccination_rate = int(values["vaccination_rate"])
+            vaccination_rate = int(float(values["vaccination_rate"]))
             vaccination_eff = float(values["vaccination_eff"])
             vaccination_start = int(values["vaccination_start"])
             vaccination_end = int(values["vaccination_end"])
@@ -139,22 +139,22 @@ while True:
     elif event == "-DRAW-":
         delete_figure_agg(fig_agg)
         if (
-            validate_positive_int_input(values["susceptible"])
-            and validate_positive_int_input(values["infectious"])
-            and validate_positive_int_input(values["recovered"])
+            validate_positive_float_input(values["susceptible"])
+            and validate_positive_float_input(values["infectious"])
+            and validate_positive_float_input(values["recovered"])
             and validate_positive_float_input(values["beta"])
-            and validate_positive_float_input(values["recovery_time"])
-            and validate_positive_float_input(values["duration"])
+            and validate_positive_int_input(values["recovery_time"])
+            and validate_positive_int_input(values["duration"])
             and validate_positive_float_input(values["sw_a"])
             and validate_positive_int_input(values["sw_start"])
         ):
-            susceptible = float(values["susceptible"])
-            infectious = float(values["infectious"])
-            recovered = float(values["recovered"])
+            susceptible = int(float(values["susceptible"]))
+            infectious = int(float(values["infectious"]))
+            recovered = int(float(values["recovered"]))
 
-            t_1 = float(values["duration"])
+            t_1 = int(values["duration"])
             beta = float(values["beta"])
-            gamma = 1 / float(values["recovery_time"])
+            gamma = 1 / int(values["recovery_time"])
 
             sw_a = float(values["sw_a"])
             sw_start = int(values["sw_start"])

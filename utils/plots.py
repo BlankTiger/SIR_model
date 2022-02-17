@@ -31,11 +31,18 @@ def plot_SIR(y, t, beta, gamma):
     """
     plt.gcf()
     plt.style.use("fivethirtyeight")
-    plt.rcParams.update({"font.size": 13})
+    plt.rcParams.update({"font.size": 16})
     np.set_printoptions(suppress=True)
     S, I, R = y.y[0, :], y.y[1, :], y.y[2, :]
     max_x, max_y = find_max_and_argmax(t, I)
     figure = plt.figure()
+    plt.text(
+        max(t),
+        max(S) * 1.05,
+        "© M. Urban, J. Jodłowska, J. Balbus, K. Kubica",
+        ha="right",
+        va="top",
+    )
     dpi = figure.get_dpi()
     figure.set_figwidth(1000 / dpi)
     figure.set_figheight(800 / dpi)
@@ -50,14 +57,17 @@ def plot_SIR(y, t, beta, gamma):
         + str(int(round(max_x, 0)))
         + "}$"
     )
-    additional_text = (r_0_text, max_infectious_text)
+    r_tmax_text = (
+        "$R\\left({t_\\mathrm{max}}\\right) = " + str(int(round(R[-1], 0))) + "$"
+    )
+    additional_text = (r_0_text, max_infectious_text, r_tmax_text)
     plt.ticklabel_format(axis="y", useOffset=False, style="Plain")
     plt.xlabel("Time [days]")
     plt.ylabel("Number of people")
     handles, labels = plt.gca().get_legend_handles_labels()
     for text in additional_text:
         handles.append(mpatches.Patch(color="none", label=text))
-    plt.legend(handles=handles)
+    plt.legend(handles=handles, framealpha=1)
     plt.tight_layout()
     return figure
 
@@ -78,13 +88,20 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
     """
     plt.gcf()
     plt.style.use("fivethirtyeight")
-    plt.rcParams.update({"font.size": 13})
+    plt.rcParams.update({"font.size": 16})
     np.set_printoptions(suppress=True)
     S, I, R = y.y[0, :], y.y[1, :], y.y[2, :]
     S_v, I_v, R_v = y_v.y[0, :], y_v.y[1, :], y_v.y[2, :]
     max_x, max_y = find_max_and_argmax(t, I)
     max_x_v, max_y_v = find_max_and_argmax(t, I_v)
     figure = plt.figure()
+    plt.text(
+        max(t),
+        max(S) * 1.05,
+        "© M. Urban, J. Jodłowska, J. Balbus, K. Kubica",
+        ha="right",
+        va="top",
+    )
     dpi = figure.get_dpi()
     figure.set_figwidth(1000 / dpi)
     figure.set_figheight(800 / dpi)
@@ -109,7 +126,13 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
         + str(int(round(max_x_v, 0)))
         + "}$"
     )
-    additional_text = (r_0_text, max_infectious_text, "")
+    r_tmax_text = (
+        "$R\\left({t_\\mathrm{max}}\\right) = " + str(int(round(R[-1], 0))) + "$"
+    )
+    r_tmax_v_text = (
+        "$R_v\\left({t_\\mathrm{max}}\\right) = " + str(int(round(R_v[-1], 0))) + "$"
+    )
+    additional_text = (r_0_text, max_infectious_text, r_tmax_text, "")
     plt.ticklabel_format(axis="y", useOffset=False, style="Plain")
     plt.xlabel("Time [days]")
     plt.ylabel("Number of people")
@@ -120,6 +143,7 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
     for _ in range(3, 6):
         handles.append(handles.pop(3))
     handles.append(mpatches.Patch(color="none", label=max_infectious_v_text))
-    plt.legend(handles=handles, handlelength=3)
+    handles.append(mpatches.Patch(color="none", label=r_tmax_v_text))
+    plt.legend(handles=handles, handlelength=3, framealpha=1)
     plt.tight_layout()
     return figure
