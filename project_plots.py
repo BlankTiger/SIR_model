@@ -25,17 +25,16 @@ def prepare_data_for_plots():
     from utils.mathematics import solve_SIR, solve_SIR_with_vaccination
 
     basic_SIR_data = solve_SIR(
-        (0, 150), [1e6, 1, 0], 4e-7, 0.2, False, 0, 0, t_values=np.linspace(0, 150, 150)
+        (0, 150), [1e6, 1, 0], beta=4e-7, gamma=0.2, with_multiwave=False, a=0, t_3=0
     )
     basic_SIR_data_2 = solve_SIR(
         (0, 150),
         [1e6, 1, 0],
-        2.8571e-7,
-        0.1429,
-        False,
-        0,
-        0,
-        t_values=np.linspace(0, 150, 150),
+        beta=2.8571e-7,
+        gamma=0.1429,
+        with_multiwave=False,
+        a=0,
+        t_3=0,
     )
     vaccination_comparison_data_50_71 = solve_SIR_with_vaccination(
         (0, 150),
@@ -67,24 +66,10 @@ def prepare_data_for_plots():
         t_values=np.linspace(0, 150, 150),
     )
     multiwave_comparison_data_30 = solve_SIR(
-        (0, 400),
-        [1e6, 1, 0],
-        4e-7,
-        0.2,
-        True,
-        0.01,
-        30,
-        t_values=np.linspace(0, 150, 150),
+        (0, 400), [1e6, 1, 0], beta=4e-7, gamma=0.2, with_multiwave=True, a=0.01, t_3=30
     )
     multiwave_comparison_data_60 = solve_SIR(
-        (0, 400),
-        [1e6, 1, 0],
-        4e-7,
-        0.2,
-        True,
-        0.01,
-        60,
-        t_values=np.linspace(0, 150, 150),
+        (0, 400), [1e6, 1, 0], beta=4e-7, gamma=0.2, with_multiwave=True, a=0.01, t_3=60
     )
     return (
         basic_SIR_data.y,
