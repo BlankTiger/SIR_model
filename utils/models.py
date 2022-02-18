@@ -1,7 +1,7 @@
 import utils
 
 
-def SIR(t, y, beta, gamma, with_multiwave, a, t_3):
+def SIR(t, y, beta, gamma, a, R_prev):
     """Function modeling a SIR model.
 
     Args:
@@ -20,11 +20,10 @@ def SIR(t, y, beta, gamma, with_multiwave, a, t_3):
     _S = -beta * S * I
     _R = gamma * I
     _I = beta * S * I - _R
-    if with_multiwave and t > t_3:
-        diff = a * R
-        dydt = [_S + diff, _I, _R - diff]
-        return dydt
-    dydt = [_S, _I, _R]
+    diff = a * R_prev
+    if R - diff < 0:
+        diff = 0
+    dydt = [_S + diff, _I, _R - diff]
     return dydt
 
 
