@@ -4,7 +4,6 @@ from matplotlib.backends.backend_tkagg import (
 )
 from .plots import plot_SIR, plot_SIR_with_vaccination
 from .mathematics import solve_SIR, solve_SIR_with_vaccination
-from numpy import linspace
 
 
 class Toolbar(NavigationToolbar2Tk):
@@ -103,8 +102,8 @@ def create_updated_fig_SIR_with_vaccination(
     t_1,
     beta,
     gamma,
-    vaccination_rate,
     eff,
+    vac_rate,
     t_start,
     t_end,
     with_multiwave,
@@ -145,7 +144,7 @@ def create_updated_fig_SIR_with_vaccination(
         beta=beta,
         gamma=gamma,
         eff=eff,
-        vac_rate=vaccination_rate,
+        vac_rate=vac_rate,
         a=a,
     )
     fig = plot_SIR_with_vaccination(sol, sol_v, sol.t, beta, gamma)

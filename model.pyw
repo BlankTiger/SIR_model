@@ -33,9 +33,7 @@ gamma = 0.2
 y0 = [1e6, 1, 0]
 
 # Solve the ODEs
-sol = solve_SIR(
-    (0, 400), y0, beta=beta, gamma=gamma, with_multiwave=False, a=0.01, t_3=30
-)
+sol = solve_SIR((0, 400), y0, beta=beta, gamma=gamma, with_multiwave=False, a=0, t_3=30)
 
 # Plot the solution
 fig = plot_SIR(sol, sol.t, beta, gamma)
@@ -94,9 +92,9 @@ while True:
             and validate_positive_int_input(values["vaccination_start"])
             and validate_positive_int_input(values["vaccination_end"])
         ):
-            susceptible = int(float(values["susceptible"]))
-            infectious = int(float(values["infectious"]))
-            recovered = int(float(values["recovered"]))
+            S = int(float(values["susceptible"]))
+            I = int(float(values["infectious"]))
+            R = int(float(values["recovered"]))
 
             t_1 = int(values["duration"])
             beta = float(values["beta"])
@@ -105,22 +103,22 @@ while True:
             sw_a = float(values["sw_a"])
             sw_start = int(values["sw_start"])
 
-            vaccination_rate = int(float(values["vaccination_rate"]))
-            vaccination_eff = float(values["vaccination_eff"])
-            vaccination_start = int(values["vaccination_start"])
-            vaccination_end = int(values["vaccination_end"])
+            vac_rate = int(float(values["vaccination_rate"]))
+            vac_eff = float(values["vaccination_eff"])
+            vac_start = int(values["vaccination_start"])
+            vac_end = int(values["vaccination_end"])
 
             fig = create_updated_fig_SIR_with_vaccination(
-                susceptible,
-                infectious,
-                recovered,
+                S,
+                I,
+                R,
                 t_1,
                 beta,
                 gamma,
-                vaccination_rate,
-                vaccination_eff,
-                vaccination_start,
-                vaccination_end,
+                vac_eff,
+                vac_rate,
+                vac_start,
+                vac_end,
                 with_multiwave,
                 sw_a,
                 sw_start,
