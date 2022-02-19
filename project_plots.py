@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-import matplotlib
-import matplotlib.font_manager as fm
 import numpy as np
 from utils.mathematics import find_max_and_argmax
 import platform
@@ -220,14 +218,77 @@ def plot_SIR_with_vaccination_comparison(y_v_1, y_v_2):
     plt.show()
 
 
-def plot_SIR_with_multiwave_comparison():
-    figure = plt.figure(facecolor="#ffffff")
-    figure.patch.set_facecolor("#ffffff")
+def plot_SIR_with_multiwave_comparison(y1, y2):
+    plt.style.use("fivethirtyeight")
+    plt.rcParams.update({"font.size": 16})
+
+    np.set_printoptions(suppress=True)
+    S_1, I_1, R_1 = y1[0, :], y1[1, :], y1[2, :]
+    S_2, I_2, R_2 = y2[0, :], y2[1, :], y2[2, :]
+    t = np.linspace(0, 400, 400)
+    beta = 4e-7
+    gamma = 0.2
+    max_x_1, max_y_1 = find_max_and_argmax(t, I_1)
+    max_x_2, max_y_2 = find_max_and_argmax(t, I_2)
+    figure = plt.figure(facecolor="white")
     axes = plt.axes()
     axes.set_facecolor("#ffffff")
     # axes.tick_params(color="#ffffff", labelcolor="#ffffff")
     for spine in axes.spines.values():
         spine.set_edgecolor("#ffffff")
+    plt.text(
+        max(t),
+        max(S_1) * 1.05,
+        "© M. Urban, J. Jodłowska, J. Balbus, K. Kubica",
+        ha="right",
+        va="top",
+    )
+    figure.set_figwidth(12)
+    figure.set_figheight(8)
+    plt.plot(t, S_1, "o", color=colors[0], label="Susceptible (30)")
+    plt.plot(t, I_1, "o", color=colors[4], label="Infectious (30)")
+    plt.plot(t, R_1, "o", color=colors[6], label="Recovered (30)")
+    plt.plot(t, S_2, "--", color=colors[1], label="Susceptible (60)")
+    plt.plot(t, I_2, "--", color=colors[5], label="Infectious (60)")
+    plt.plot(t, R_2, "--", color=colors[7], label="Recovered (60)")
+    # max_infectious_1_text = (
+    #     "$I_{\\mathrm{max}}(t) = "
+    #     + str(int(round(max_y_1, 0)))
+    #     + "\\;\\mathrm{at}\\;t="
+    #     + str(int(round(max_x_1, 0)))
+    #     + "$"
+    # )
+    # max_infectious_2_text = (
+    #     "$I_{\\mathrm{max}}(t) = "
+    #     + str(int(round(max_y_2, 0)))
+    #     + "\\;\\mathrm{at}\\;t="
+    #     + str(int(round(max_x_2, 0)))
+    #     + "$"
+    # )
+    additional_text = ""
+    plt.ticklabel_format(axis="y", useOffset=False, style="Plain")
+    plt.xlabel("Time [days]")
+    plt.ylabel("Number of people")
+    handles, _ = plt.gca().get_legend_handles_labels()
+    handles.append(mpatches.Patch(color="none", label=additional_text))
+    # for text in additional_text:
+    #     handles.append(mpatches.Patch(color="none", label=text))
+    # move elements of index 3, 4, 5 to the end of the list
+    for _ in range(3, 6):
+        handles.append(handles.pop(3))
+    # handles.append(mpatches.Patch(color="none", label=max_infectious_2_text))
+    plt.legend(
+        handles=handles, handlelength=3, framealpha=1, numpoints=3, loc="center left"
+    )
+    plt.tight_layout()
+    plt.savefig(
+        "C:/Users/work/Desktop/optymalizacja-figures/fig_3.tif",
+        facecolor="white",
+        dpi=300,
+    )
+    plt.savefig(
+        "C:/Users/work/Desktop/optymalizacja-figures/fig_3.pdf", facecolor="white"
+    )
     plt.show()
 
 
@@ -326,43 +387,18 @@ if __name__ == "__main__":
             ctypes.windll.user32.SetProcessDPIAware()
         elif float(platform.release()) >= 8:
             ctypes.windll.shcore.SetProcessDpiAwareness(1)
-    # path_1 = "C:\\Users\\work\\Desktop\\Noto_Sans\\NotoSans-Bold.ttf"
-    # path = path_1
-    # fe = fm.FontEntry(
-    #     fname=path,
-    #     name="NotoSans-Bold",
-    # )
-    # fe = fm.FontEntry(
-    #     fname=path,
-    #     name="lmroman10",
-    # )
-    # fm.fontManager.ttflist.insert(0, fe)
-    # plt.rcParams["font.family"] = fe.name
-    # plt.rcParams.update(
-    #     {
-    #         "text.usetex": True,
-    #         "font.family": "serif",
-    #         "font.serif": ["NotoSans-Regular"],
-    #     }
-    # )
-    # matplotlib.rcParams[
-    #     "text.latex.preamble"
-    # ] = r"""\usepackage{siunitx}
-    #     \usepackage[MeX]{polski}
-    #     \usepackage[utf8]{inputenc}
-    #     \usepackage[english,polish]{babel}
-    #     \sisetup{detect-all}"""
     (
         basic_SIR_data,
         basic_SIR_data_2,
         vaccination_comparison_data_50_71,
         vaccination_comparison_data_50_91,
-        _,
-        _,
+        multiwave_SIR_data,
+        multiwave_SIR_data_2,
     ) = prepare_data_for_plots()
+
     plot_basic_SIR(basic_SIR_data)
     plot_SIR_with_vaccination_comparison(
         vaccination_comparison_data_50_71, vaccination_comparison_data_50_91
     )
-    # plot_SIR_with_multiwave_comparison()
+    plot_SIR_with_multiwave_comparison(multiwave_SIR_data, multiwave_SIR_data_2)
     plot_basic_SIR_param_comp(basic_SIR_data, basic_SIR_data_2)

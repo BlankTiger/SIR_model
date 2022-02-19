@@ -1,7 +1,7 @@
-__requires__ = ["matplotlib==3.4.1", "PySimpleGUI==4.55.1"]
+# __requires__ = ["matplotlib==3.4.1", "PySimpleGUI==4.55.1"]
 import platform
 
-import pkg_resources
+# import pkg_resources
 import PySimpleGUI as sg
 
 from utils.drawing import (
