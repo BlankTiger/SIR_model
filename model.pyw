@@ -30,16 +30,11 @@ if platform.system() == "Windows":
 # Default values and initial plot
 beta = 4e-7
 gamma = 0.2
-
-S0 = 1000000
-I0 = 1
-R0 = 0
-y0 = [S0, I0, R0]
-t_1 = 400
+y0 = [1e6, 1, 0]
 
 # Solve the ODEs
 sol = solve_SIR(
-    (0, t_1), y0, beta=beta, gamma=gamma, with_multiwave=False, a=0.01, t_3=30
+    (0, 400), y0, beta=beta, gamma=gamma, with_multiwave=False, a=0.01, t_3=30
 )
 
 # Plot the solution

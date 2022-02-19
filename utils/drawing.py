@@ -82,14 +82,15 @@ def create_updated_fig_SIR(
     Returns:
         fig (matplotlib.figure): The figure with the updated SIR values
     """
+
     sol = solve_SIR(
         (0, t_1),
         [susceptible, infectious, recovered],
+        with_multiwave,
+        t_3,
         beta=beta,
         gamma=gamma,
-        with_multiwave=with_multiwave,
         a=a,
-        t_3=t_3,
     )
     fig = plot_SIR(sol, sol.t, beta, gamma)
     return fig
@@ -131,30 +132,21 @@ def create_updated_fig_SIR_with_vaccination(
         fig (matplotlib.figure): The figure with the updated SIR values with
             vaccination
     """
-    t_values = linspace(0, t_1, int(t_1) * 10)
-    y_values = solve_SIR(
+    y0 = [susceptible, infectious, recovered]
+
+    sol = solve_SIR((0, t_1), y0, with_multiwave, t_3, beta=beta, gamma=gamma, a=a)
+    sol_v = solve_SIR_with_vaccination(
         (0, t_1),
-        [susceptible, infectious, recovered],
-        beta,
-        gamma,
-        with_multiwave,
-        a,
-        t_3,
-        t_values=t_values,
-    )
-    y_with_vac_values = solve_SIR_with_vaccination(
-        (0, t_1),
-        [susceptible, infectious, recovered],
-        beta,
-        gamma,
-        vaccination_rate,
-        eff,
+        y0,
         t_start,
         t_end,
         with_multiwave,
-        a,
         t_3,
-        t_values=t_values,
+        beta=beta,
+        gamma=gamma,
+        eff=eff,
+        vac_rate=vaccination_rate,
+        a=a,
     )
-    fig = plot_SIR_with_vaccination(y_values, y_with_vac_values, t_values, beta, gamma)
+    fig = plot_SIR_with_vaccination(sol, sol_v, sol.t, beta, gamma)
     return fig
