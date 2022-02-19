@@ -1,8 +1,7 @@
-__requires__ = ["matplotlib==3.4.1", "PySimpleGUI==4.55.1"]
+# __requires__ = ["matplotlib==3.4.1", "PySimpleGUI==4.55.1"]
 import platform
 
-from numpy import linspace
-import pkg_resources
+# import pkg_resources
 import PySimpleGUI as sg
 
 from utils.drawing import (
@@ -36,15 +35,15 @@ S0 = 1000000
 I0 = 1
 R0 = 0
 y0 = [S0, I0, R0]
-
 t_1 = 400
-t_values = linspace(0, t_1, 400)
 
 # Solve the ODEs
-y_values = solve_SIR((0, t_1), y0, beta, gamma, False, 0, 0, t_values=t_values)
+sol = solve_SIR(
+    (0, t_1), y0, beta=beta, gamma=gamma, with_multiwave=False, a=0.01, t_3=30
+)
 
 # Plot the solution
-fig = plot_SIR(y_values, t_values, beta, gamma)
+fig = plot_SIR(sol, sol.t, beta, gamma)
 
 # GUI
 sg.theme("DarkGrey5")

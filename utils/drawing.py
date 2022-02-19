@@ -82,18 +82,16 @@ def create_updated_fig_SIR(
     Returns:
         fig (matplotlib.figure): The figure with the updated SIR values
     """
-    t_values = linspace(0, t_1, int(t_1) * 10)
-    y_values = solve_SIR(
+    sol = solve_SIR(
         (0, t_1),
         [susceptible, infectious, recovered],
-        beta,
-        gamma,
-        with_multiwave,
-        a,
-        t_3,
-        t_values=t_values,
+        beta=beta,
+        gamma=gamma,
+        with_multiwave=with_multiwave,
+        a=a,
+        t_3=t_3,
     )
-    fig = plot_SIR(y_values, t_values, beta, gamma)
+    fig = plot_SIR(sol, sol.t, beta, gamma)
     return fig
 
 
