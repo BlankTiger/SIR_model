@@ -42,7 +42,7 @@ def prepare_data_for_plots():
         2e4,
         0.9,
         50,
-        71,
+        70,
         False,
         0,
         0,
@@ -166,12 +166,12 @@ def plot_SIR_with_vaccination_comparison(y_v_1, y_v_2):
     )
     figure.set_figwidth(12)
     figure.set_figheight(8)
-    plt.plot(t, S_v_1, "o", color=colors[0], label="Susceptible (50-71)")
-    plt.plot(t, I_v_1, "o", color=colors[4], label="Infectious (50-71)")
-    plt.plot(t, R_v_1, "o", color=colors[6], label="Recovered (50-71)")
-    plt.plot(t, S_v_2, "--", color=colors[1], label="Susceptible (50-91)")
-    plt.plot(t, I_v_2, "--", color=colors[5], label="Infectious (50-91)")
-    plt.plot(t, R_v_2, "--", color=colors[7], label="Recovered (50-91)")
+    plt.plot(t, S_v_1, color=colors[0], label="Susceptible")
+    plt.plot(t, I_v_1, color=colors[4], label="Infectious")
+    plt.plot(t, R_v_1, color=colors[6], label="Recovered")
+    plt.plot(t, S_v_2, "--", color=colors[1], label="Susceptible")
+    plt.plot(t, I_v_2, "--", color=colors[5], label="Infectious")
+    plt.plot(t, R_v_2, "--", color=colors[7], label="Recovered")
     r_0_text = "$R_0 = " + str(round(beta * S_v_1[0] / gamma, 3)) + "$"
     max_infectious_v_1_text = (
         "$I_{\\mathrm{max}}(t) = "
@@ -245,12 +245,12 @@ def plot_SIR_with_multiwave_comparison(y1, y2):
     )
     figure.set_figwidth(12)
     figure.set_figheight(8)
-    plt.plot(t, S_1, "o", color=colors[0], label="Susceptible (30)")
-    plt.plot(t, I_1, "o", color=colors[4], label="Infectious (30)")
-    plt.plot(t, R_1, "o", color=colors[6], label="Recovered (30)")
-    plt.plot(t, S_2, "--", color=colors[1], label="Susceptible (60)")
-    plt.plot(t, I_2, "--", color=colors[5], label="Infectious (60)")
-    plt.plot(t, R_2, "--", color=colors[7], label="Recovered (60)")
+    plt.plot(t, S_1, color=colors[0], label="Susceptible")
+    plt.plot(t, I_1, color=colors[4], label="Infectious")
+    plt.plot(t, R_1, color=colors[6], label="Recovered")
+    plt.plot(t, S_2, "--", color=colors[1], label="Susceptible")
+    plt.plot(t, I_2, "--", color=colors[5], label="Infectious")
+    plt.plot(t, R_2, "--", color=colors[7], label="Recovered")
     # max_infectious_1_text = (
     #     "$I_{\\mathrm{max}}(t) = "
     #     + str(int(round(max_y_1, 0)))
@@ -326,9 +326,9 @@ def plot_basic_SIR_param_comp(basic_SIR_data_1, basic_SIR_data_2):
     )
     figure.set_figwidth(12)
     figure.set_figheight(8)
-    plt.plot(t, S_1, color=colors[0], label="Susceptible (5 days)")
-    plt.plot(t, I_1, color=colors[4], label="Infectious (5 days)")
-    plt.plot(t, R_1, color=colors[6], label="Recovered (5 days)")
+    plt.plot(t, S_1, color=colors[0], label="Susceptible")
+    plt.plot(t, I_1, color=colors[4], label="Infectious")
+    plt.plot(t, R_1, color=colors[6], label="Recovered")
     max_infectious_text = (
         "$I_{\\mathrm{max}}(t) = "
         + str(int(round(max_y, 0)))
@@ -339,9 +339,9 @@ def plot_basic_SIR_param_comp(basic_SIR_data_1, basic_SIR_data_2):
     r_tmax_text = (
         "$R\\left({t_\\mathrm{max}}\\right) = " + str(int(round(R_1[-1], 0))) + "$"
     )
-    plt.plot(t, S_2, "--", color=colors[1], label="Susceptible (7 days)")
-    plt.plot(t, I_2, "--", color=colors[5], label="Infectious (7 days)")
-    plt.plot(t, R_2, "--", color=colors[7], label="Recovered (7 days)")
+    plt.plot(t, S_2, "--", color=colors[1], label="Susceptible")
+    plt.plot(t, I_2, "--", color=colors[5], label="Infectious")
+    plt.plot(t, R_2, "--", color=colors[7], label="Recovered")
     max_infectious_2_text = (
         "$I_{\\mathrm{max}}(t) = "
         + str(int(round(max_y_2, 0)))
