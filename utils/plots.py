@@ -29,9 +29,10 @@ def plot_SIR(y, t, beta, gamma):
     Returns:
         figure: figure object
     """
+    fig, ax = plt.subplots(1)
     plt.gcf()
     plt.style.use("fivethirtyeight")
-    plt.rcParams.update({"font.size": 12})
+    plt.rcParams.update({"font.size": 10})
     np.set_printoptions(suppress=True)
     S, I, R = y.y[0, :], y.y[1, :], y.y[2, :]
     max_x, max_y = find_max_and_argmax(t, I)
@@ -88,7 +89,7 @@ def plot_SIR_with_vaccination(y, y_v, t, beta, gamma):
     """
     plt.gcf()
     plt.style.use("fivethirtyeight")
-    plt.rcParams.update({"font.size": 12})
+    plt.rcParams.update({"font.size": 10})
     np.set_printoptions(suppress=True)
     S, I, R = y.y[0, :], y.y[1, :], y.y[2, :]
     S_v, I_v, R_v = y_v.y[0, :], y_v.y[1, :], y_v.y[2, :]
