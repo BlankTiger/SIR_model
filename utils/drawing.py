@@ -71,7 +71,7 @@ def create_updated_fig_SIR(
     with_multiwave,
     a,
     t_3,
-    fig=None,
+    already_plotted=False,
 ):
     """Creates a new figure with the updated SIR values
 
@@ -99,7 +99,7 @@ def create_updated_fig_SIR(
         gamma=gamma,
         a=a,
     )
-    fig = plot_SIR(sol, sol.t, beta, gamma, fig)
+    fig = plot_SIR(sol, sol.t, beta, gamma, already_plotted)
     return fig
 
 
@@ -117,7 +117,7 @@ def create_updated_fig_SIR_with_vaccination(
     with_multiwave,
     a,
     t_3,
-    fig=None,
+    already_plotted=False,
 ):
     y0 = [susceptible, infectious, recovered]
 
@@ -134,5 +134,5 @@ def create_updated_fig_SIR_with_vaccination(
         vac_rate=vac_rate,
         a=a,
     )
-    fig = plot_SIR_with_vaccination(sol_v, sol_v.t, beta, gamma, fig)
+    fig = plot_SIR_with_vaccination(sol_v, sol_v.t, beta, gamma, already_plotted)
     return fig

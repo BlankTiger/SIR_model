@@ -61,9 +61,6 @@ window = sg.Window(
     resizable=True,
     finalize=True,
 )
-# this scaling is not needed in newer versions of python I think
-# window.TKroot.tk.call("tk", "scaling", 3)
-
 
 # Insert initial figure into canvas
 fig_agg = draw_fig(window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanvas)
@@ -128,7 +125,6 @@ while True:
             vac_end = int(values["vaccination_end"])
 
             if already_plotted:
-                fig = pkl.load(open(".fig.pkl", "rb"))
                 figure = create_updated_fig_SIR_with_vaccination(
                     S,
                     I,
@@ -143,7 +139,7 @@ while True:
                     with_multiwave,
                     sw_a,
                     sw_start,
-                    fig=fig,
+                    already_plotted,
                 )
                 fig_agg = draw_fig(
                     window["-CANVAS-"].TKCanvas, figure, window["-TOOLBAR-"].TKCanvas
@@ -194,8 +190,6 @@ while True:
             sw_start = int(values["sw_start"])
 
             if already_plotted:
-                fig = pkl.load(open(".fig.pkl", "rb"))
-
                 figure = create_updated_fig_SIR(
                     susceptible,
                     infectious,
@@ -206,7 +200,7 @@ while True:
                     with_multiwave,
                     sw_a,
                     sw_start,
-                    fig=fig,
+                    already_plotted,
                 )
                 fig_agg = draw_fig(
                     window["-CANVAS-"].TKCanvas, figure, window["-TOOLBAR-"].TKCanvas

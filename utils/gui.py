@@ -43,7 +43,7 @@ def create_row(col_1, col_2, col_3, row_visible, row_key=""):
         sg.Column: row
     """
     return sg.Column(
-        [[col_1, col_2, col_3]],
+        [[create_stretch(), col_1, col_2, col_3, create_stretch()]],
         pad=(0, 0),
         key=row_key,
         visible=row_visible,
@@ -64,42 +64,42 @@ def create_layout(*elements):
     return [[*elements]]
 
 
-susceptible_text = create_col_for_row(sg.Text(text="Susceptible", size=(17, 1)))
+susceptible_text = create_col_for_row(sg.Text(text="Susceptible", size=(15, 1)))
 susceptible_value = create_col_for_row(
     sg.InputText("1000000", size=(20, 1), justification="right", key="susceptible")
 )
 
-infectious_text = create_col_for_row(sg.Text(text="Infectious", size=(17, 1)))
+infectious_text = create_col_for_row(sg.Text(text="Infectious", size=(15, 1)))
 infectious_value = create_col_for_row(
     sg.InputText("1", size=(20, 1), justification="right", key="infectious")
 )
 
-recovered_text = create_col_for_row(sg.Text(text="Recovered", size=(17, 1)))
+recovered_text = create_col_for_row(sg.Text(text="Recovered", size=(15, 1)))
 recovered_value = create_col_for_row(
     sg.InputText("0", size=(20, 1), justification="right", key="recovered")
 )
 
-duration_text = create_col_for_row(sg.Text(text="Duration", size=(17, 1)))
+duration_text = create_col_for_row(sg.Text(text="Duration", size=(15, 1)))
 duration_value = create_col_for_row(
     sg.InputText("150", size=(20, 1), justification="right", key="duration")
 )
 
-beta_text = create_col_for_row(sg.Text(text="β", size=(17, 1)))
+beta_text = create_col_for_row(sg.Text(text="β", size=(15, 1)))
 beta_value = create_col_for_row(
     sg.InputText("4e-7", size=(20, 1), justification="right", key="beta")
 )
 
-recovery_time_text = create_col_for_row(sg.Text(text="Recovery time", size=(17, 1)))
+recovery_time_text = create_col_for_row(sg.Text(text="Recovery time", size=(15, 1)))
 recovery_time_value = create_col_for_row(
     sg.InputText("5", size=(20, 1), justification="right", key="recovery_time")
 )
 
-sw_a_text = create_col_for_row(sg.Text(text="Immunity loss rate", size=(17, 1)))
+sw_a_text = create_col_for_row(sg.Text(text="a", size=(15, 1)))
 sw_a_value = create_col_for_row(
     sg.InputText("0.01", size=(20, 1), justification="right", key="sw_a")
 )
 
-sw_start_text = create_col_for_row(sg.Text(text="Start of immunity loss", size=(17, 1)))
+sw_start_text = create_col_for_row(sg.Text(text="Immunity loss start", size=(15, 1)))
 sw_start_value = create_col_for_row(
     sg.InputText("30", size=(20, 1), justification="right", key="sw_start")
 )
@@ -129,22 +129,22 @@ sw_start_row = create_row(
 )
 
 
-vac_rate_text = create_col_for_row(sg.Text(text="Vaccination rate", size=(17, 1)))
+vac_rate_text = create_col_for_row(sg.Text(text="Vaccination rate", size=(15, 1)))
 vac_rate_value = create_col_for_row(
     sg.InputText("20000", size=(20, 1), justification="right", key="vaccination_rate")
 )
 
-vac_eff_text = create_col_for_row(sg.Text(text="Vaccination eff", size=(17, 1)))
+vac_eff_text = create_col_for_row(sg.Text(text="Vaccination eff", size=(15, 1)))
 vac_eff_value = create_col_for_row(
     sg.InputText("0.9", size=(20, 1), justification="right", key="vaccination_eff")
 )
 
-vac_start_text = create_col_for_row(sg.Text(text="Vaccination start", size=(17, 1)))
+vac_start_text = create_col_for_row(sg.Text(text="Vaccination start", size=(15, 1)))
 vac_start_value = create_col_for_row(
     sg.InputText("50", size=(20, 1), justification="right", key="vaccination_start")
 )
 
-vac_end_text = create_col_for_row(sg.Text(text="Vaccination end", size=(17, 1)))
+vac_end_text = create_col_for_row(sg.Text(text="Vaccination end", size=(15, 1)))
 vac_end_value = create_col_for_row(
     sg.InputText("70", size=(20, 1), justification="right", key="vaccination_end")
 )
@@ -190,9 +190,9 @@ vac_end_row = create_row(
 )
 
 draw_row = create_row(
-    sg.Button("Plot", key="-DRAW-", size=(10, 2), expand_x=True),
+    sg.Button("Plot", key="-DRAW-", size=(5, 2), expand_x=True),
     create_stretch(),
-    sg.Button("Clear", key="-CLEAR-", size=(10, 2), expand_x=True),
+    sg.Button("Clear", key="-CLEAR-", size=(5, 2), expand_x=True),
     True,
 )
 
