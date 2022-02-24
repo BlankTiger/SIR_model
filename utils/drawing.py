@@ -29,7 +29,6 @@ def draw_fig(canvas, fig, canvas_toolbar):
         for child in canvas_toolbar.winfo_children():
             child.destroy()
     figure_canvas_agg = FigureCanvasTkAgg(fig, canvas)
-    figure_canvas_agg.draw()
     toolbar = Toolbar(figure_canvas_agg, canvas_toolbar)
     toolbar.update()
     figure_canvas_agg.get_tk_widget().pack(side="top", fill="both", expand=True)
@@ -63,7 +62,16 @@ def delete_figure_agg(figure_canvas_agg):
 
 
 def create_updated_fig_SIR(
-    susceptible, infectious, recovered, t_1, beta, gamma, with_multiwave, a, t_3
+    susceptible,
+    infectious,
+    recovered,
+    t_1,
+    beta,
+    gamma,
+    with_multiwave,
+    a,
+    t_3,
+    fig=None,
 ):
     """Creates a new figure with the updated SIR values
 
@@ -91,7 +99,7 @@ def create_updated_fig_SIR(
         gamma=gamma,
         a=a,
     )
-    fig = plot_SIR(sol, sol.t, beta, gamma)
+    fig = plot_SIR(sol, sol.t, beta, gamma, fig)
     return fig
 
 
@@ -109,33 +117,12 @@ def create_updated_fig_SIR_with_vaccination(
     with_multiwave,
     a,
     t_3,
+    fig=None,
 ):
-    """Creates a new figure with the updated SIR values with vaccination
-
-    Args:
-        susceptible (int): The susceptible population
-        infectious (int): The infectious population
-        recovered (int): The recovered population
-        t_1 (float): The time of the simulation
-        beta (float): The infection rate
-        gamma (float): The recovery rate
-        vaccination_rate (int): The vaccination rate
-        eff (float): The efficacy of the vaccine
-        t_start (float): The start time of vaccinations
-        t_end (float): The final day of vaccinations
-        with_multiwave (bool): indicates if recovered people lose immunity
-        a (float): proportion of recovered people who lose immunity
-        t_3 (int): time of the start of immunity loss
-
-    Returns:
-        fig (matplotlib.figure): The figure with the updated SIR values with
-            vaccination
-    """
     y0 = [susceptible, infectious, recovered]
 
-    sol = solve_SIR((0, t_1), y0, with_multiwave, t_3, beta=beta, gamma=gamma, a=a)
     sol_v = solve_SIR_with_vaccination(
-        (0, t_1),
+        [0, t_1],
         y0,
         t_start,
         t_end,
@@ -147,5 +134,5 @@ def create_updated_fig_SIR_with_vaccination(
         vac_rate=vac_rate,
         a=a,
     )
-    fig = plot_SIR_with_vaccination(sol, sol_v, sol.t, beta, gamma)
+    fig = plot_SIR_with_vaccination(sol_v, sol_v.t, beta, gamma, fig)
     return fig

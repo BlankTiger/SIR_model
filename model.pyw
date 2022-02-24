@@ -3,6 +3,8 @@ import platform
 
 # import pkg_resources
 import PySimpleGUI as sg
+import pickle as pkl
+import os
 
 from utils.drawing import (
     create_updated_fig_SIR,
@@ -27,21 +29,29 @@ if platform.system() == "Windows":
         ctypes.windll.shcore.SetProcessDpiAwareness(1)
 
 
+def set_scale(scale):
+    root = sg.tk.Tk()
+    root.tk.call("tk", "scaling", scale)
+    root.destroy()
+
+
 # Default values and initial plot
 beta = 4e-7
 gamma = 0.2
 y0 = [1e6, 1, 0]
 
 # Solve the ODEs
-sol = solve_SIR((0, 400), y0, beta=beta, gamma=gamma, with_multiwave=False, a=0, t_3=30)
+sol = solve_SIR((0, 150), y0, beta=beta, gamma=gamma, with_multiwave=False, a=0, t_3=30)
 
 # Plot the solution
 fig = plot_SIR(sol, sol.t, beta, gamma)
+set_scale(fig.dpi / 75)
 
 # GUI
 sg.theme("DarkGrey5")
 with_vaccinations = False
 with_multiwave = False
+already_plotted = True
 
 
 window = sg.Window(
@@ -71,11 +81,20 @@ while True:
         window["vaccination_start_row"].update(visible=with_vaccinations)
         window["vaccination_end_row"].update(visible=with_vaccinations)
         window.visibility_changed()
+        window.refresh()
     if event == "with_multiwave":
         with_multiwave = not with_multiwave
         window["sw_a_row"].update(visible=with_multiwave)
         window["sw_start_row"].update(visible=with_multiwave)
         window.visibility_changed()
+        window.refresh()
+    if event == "-CLEAR-":
+        delete_figure_agg(fig_agg)
+        try:
+            os.remove(".fig.pkl")
+        except FileNotFoundError:
+            pass
+        already_plotted = False
     if event == "-DRAW-" and with_vaccinations:
         delete_figure_agg(fig_agg)
         if (
@@ -108,24 +127,47 @@ while True:
             vac_start = int(values["vaccination_start"])
             vac_end = int(values["vaccination_end"])
 
-            fig = create_updated_fig_SIR_with_vaccination(
-                S,
-                I,
-                R,
-                t_1,
-                beta,
-                gamma,
-                vac_eff,
-                vac_rate,
-                vac_start,
-                vac_end,
-                with_multiwave,
-                sw_a,
-                sw_start,
-            )
-            fig_agg = draw_fig(
-                window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanvas
-            )
+            if already_plotted:
+                fig = pkl.load(open(".fig.pkl", "rb"))
+                figure = create_updated_fig_SIR_with_vaccination(
+                    S,
+                    I,
+                    R,
+                    t_1,
+                    beta,
+                    gamma,
+                    vac_eff,
+                    vac_rate,
+                    vac_start,
+                    vac_end,
+                    with_multiwave,
+                    sw_a,
+                    sw_start,
+                    fig=fig,
+                )
+                fig_agg = draw_fig(
+                    window["-CANVAS-"].TKCanvas, figure, window["-TOOLBAR-"].TKCanvas
+                )
+            else:
+                figure = create_updated_fig_SIR_with_vaccination(
+                    S,
+                    I,
+                    R,
+                    t_1,
+                    beta,
+                    gamma,
+                    vac_eff,
+                    vac_rate,
+                    vac_start,
+                    vac_end,
+                    with_multiwave,
+                    sw_a,
+                    sw_start,
+                )
+                fig_agg = draw_fig(
+                    window["-CANVAS-"].TKCanvas, figure, window["-TOOLBAR-"].TKCanvas
+                )
+                already_plotted = True
         else:
             sg.popup_error("Invalid input", title="Error")
     elif event == "-DRAW-":
@@ -151,19 +193,39 @@ while True:
             sw_a = float(values["sw_a"])
             sw_start = int(values["sw_start"])
 
-            fig = create_updated_fig_SIR(
-                susceptible,
-                infectious,
-                recovered,
-                t_1,
-                beta,
-                gamma,
-                with_multiwave,
-                sw_a,
-                sw_start,
-            )
-            fig_agg = draw_fig(
-                window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanvas
-            )
+            if already_plotted:
+                fig = pkl.load(open(".fig.pkl", "rb"))
+
+                figure = create_updated_fig_SIR(
+                    susceptible,
+                    infectious,
+                    recovered,
+                    t_1,
+                    beta,
+                    gamma,
+                    with_multiwave,
+                    sw_a,
+                    sw_start,
+                    fig=fig,
+                )
+                fig_agg = draw_fig(
+                    window["-CANVAS-"].TKCanvas, figure, window["-TOOLBAR-"].TKCanvas
+                )
+            else:
+                figure = create_updated_fig_SIR(
+                    susceptible,
+                    infectious,
+                    recovered,
+                    t_1,
+                    beta,
+                    gamma,
+                    with_multiwave,
+                    sw_a,
+                    sw_start,
+                )
+                fig_agg = draw_fig(
+                    window["-CANVAS-"].TKCanvas, figure, window["-TOOLBAR-"].TKCanvas
+                )
+                already_plotted = True
         else:
             sg.popup_error("Invalid input", title="Error")

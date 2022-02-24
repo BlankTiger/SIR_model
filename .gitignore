@@ -11,3 +11,5 @@ Include
 .pytest_cache
 model.spec
 .vimspector.json
+
+.fig.pkl
