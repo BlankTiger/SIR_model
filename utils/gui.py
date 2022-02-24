@@ -227,7 +227,7 @@ column2 = sg.Column(
                 background_color="white",
                 expand_y=True,
                 expand_x=True,
-                size=(800, 800),
+                size=(1000, 800),
             )
         ],
         [
