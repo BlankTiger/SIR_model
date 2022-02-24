@@ -81,7 +81,7 @@ recovered_value = create_col_for_row(
 
 duration_text = create_col_for_row(sg.Text(text="Duration", size=(17, 1)))
 duration_value = create_col_for_row(
-    sg.InputText("400", size=(20, 1), justification="right", key="duration")
+    sg.InputText("150", size=(20, 1), justification="right", key="duration")
 )
 
 beta_text = create_col_for_row(sg.Text(text="β", size=(17, 1)))
@@ -131,7 +131,7 @@ sw_start_row = create_row(
 
 vac_rate_text = create_col_for_row(sg.Text(text="Vaccination rate", size=(17, 1)))
 vac_rate_value = create_col_for_row(
-    sg.InputText("250", size=(20, 1), justification="right", key="vaccination_rate")
+    sg.InputText("20000", size=(20, 1), justification="right", key="vaccination_rate")
 )
 
 vac_eff_text = create_col_for_row(sg.Text(text="Vaccination eff", size=(17, 1)))
@@ -141,12 +141,12 @@ vac_eff_value = create_col_for_row(
 
 vac_start_text = create_col_for_row(sg.Text(text="Vaccination start", size=(17, 1)))
 vac_start_value = create_col_for_row(
-    sg.InputText("30", size=(20, 1), justification="right", key="vaccination_start")
+    sg.InputText("50", size=(20, 1), justification="right", key="vaccination_start")
 )
 
 vac_end_text = create_col_for_row(sg.Text(text="Vaccination end", size=(17, 1)))
 vac_end_value = create_col_for_row(
-    sg.InputText("50", size=(20, 1), justification="right", key="vaccination_end")
+    sg.InputText("70", size=(20, 1), justification="right", key="vaccination_end")
 )
 
 
@@ -190,11 +190,12 @@ vac_end_row = create_row(
 )
 
 draw_row = create_row(
+    sg.Button("Plot", key="-DRAW-", size=(10, 2), expand_x=True),
     create_stretch(),
-    sg.Button("Plot", key="-DRAW-", size=(15, 2)),
-    create_stretch(),
+    sg.Button("Clear", key="-CLEAR-", size=(10, 2), expand_x=True),
     True,
 )
+
 
 column1 = sg.Column(
     [
@@ -223,10 +224,10 @@ column2 = sg.Column(
         [
             sg.Canvas(
                 key="-CANVAS-",
-                size=(1000, 800),
                 background_color="white",
                 expand_y=True,
                 expand_x=True,
+                size=(800, 800),
             )
         ],
         [
