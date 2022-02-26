@@ -133,5 +133,5 @@ def create_updated_fig_SIR_with_vaccination(
         vac_rate=vac_rate,
         a=a,
     )
-    fig = plot.plot_SIR_with_vaccination(sol_v, sol_v.t, beta, gamma, already_plotted)
+    fig = plot.plot_SIR(sol_v, sol_v.t, beta, gamma, already_plotted)
     return fig
