@@ -1,9 +1,5 @@
-# __requires__ = ["matplotlib==3.4.1", "PySimpleGUI==4.55.1"]
 import platform
-
-# import pkg_resources
 import PySimpleGUI as sg
-import pickle as pkl
 import os
 
 from utils.drawing import (
@@ -45,6 +41,7 @@ sol = solve_SIR((0, 150), y0, beta=beta, gamma=gamma, with_multiwave=False, a=0,
 
 # Plot the solution
 fig = plot_SIR(sol, sol.t, beta, gamma)
+del plot_SIR
 set_scale(fig.dpi / 75)
 
 # GUI
@@ -70,6 +67,11 @@ fig_agg = draw_fig(window["-CANVAS-"].TKCanvas, fig, window["-TOOLBAR-"].TKCanva
 while True:
     event, values = window.read()
     if event in (None, "Exit"):
+        try:
+            os.remove(".fig.pkl")
+        except (FileNotFoundError, OSError):
+            pass
+        window.close()
         break
     if event == "with_vaccinations":
         with_vaccinations = not with_vaccinations
@@ -89,9 +91,10 @@ while True:
         delete_figure_agg(fig_agg)
         try:
             os.remove(".fig.pkl")
-        except FileNotFoundError:
+        except (FileNotFoundError, OSError):
             pass
         already_plotted = False
+
     if event == "-DRAW-" and with_vaccinations:
         delete_figure_agg(fig_agg)
         if (

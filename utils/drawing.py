@@ -2,8 +2,8 @@ from matplotlib.backends.backend_tkagg import (
     FigureCanvasTkAgg,
     NavigationToolbar2Tk,
 )
-from .plots import plot_SIR, plot_SIR_with_vaccination
-from .mathematics import solve_SIR, solve_SIR_with_vaccination
+import utils.plots as plot
+import utils.mathematics as mat
 
 
 class Toolbar(NavigationToolbar2Tk):
@@ -89,8 +89,7 @@ def create_updated_fig_SIR(
     Returns:
         fig (matplotlib.figure): The figure with the updated SIR values
     """
-
-    sol = solve_SIR(
+    sol = mat.solve_SIR(
         (0, t_1),
         [susceptible, infectious, recovered],
         with_multiwave,
@@ -99,7 +98,7 @@ def create_updated_fig_SIR(
         gamma=gamma,
         a=a,
     )
-    fig = plot_SIR(sol, sol.t, beta, gamma, already_plotted)
+    fig = plot.plot_SIR(sol, sol.t, beta, gamma, already_plotted)
     return fig
 
 
@@ -121,7 +120,7 @@ def create_updated_fig_SIR_with_vaccination(
 ):
     y0 = [susceptible, infectious, recovered]
 
-    sol_v = solve_SIR_with_vaccination(
+    sol_v = mat.solve_SIR_with_vaccination(
         [0, t_1],
         y0,
         t_start,
@@ -134,5 +133,5 @@ def create_updated_fig_SIR_with_vaccination(
         vac_rate=vac_rate,
         a=a,
     )
-    fig = plot_SIR_with_vaccination(sol_v, sol_v.t, beta, gamma, already_plotted)
+    fig = plot.plot_SIR_with_vaccination(sol_v, sol_v.t, beta, gamma, already_plotted)
     return fig
