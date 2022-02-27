@@ -13,3 +13,5 @@ model.spec
 .vimspector.json
 
 .fig.pkl
+
+SIR_model.spec
