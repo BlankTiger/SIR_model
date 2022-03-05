@@ -35,20 +35,6 @@ def draw_fig(canvas, fig, canvas_toolbar):
     return figure_canvas_agg
 
 
-def update_canvas(canvas, fig):
-    """Updates the figure_canvas_agg with the new figure
-
-    Args:
-        canvas (tk.Canvas): The canvas on which the figure is drawn
-        fig (matplotlib.figure): The figure to be drawn
-
-    Returns:
-        figure_canvas_agg (FigureCanvasTkAgg): The figure canvas
-    """
-    figure_canvas_agg = draw_fig(canvas, fig)
-    return figure_canvas_agg
-
-
 def delete_figure_agg(figure_canvas_agg):
     """Deletes the figure_canvas_agg content
 

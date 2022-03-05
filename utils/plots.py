@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib
 from .mathematics import find_max_and_argmax
 import pickle as pkl
 
@@ -24,7 +23,6 @@ line_styles = ["-", "--", "-.", ":"]
 
 
 def plot_SIR(y, t, beta, gamma, already_plotted=False) -> plt.Figure:
-    matplotlib.use("agg")
     plt.style.use("fivethirtyeight")
     plt.rcParams.update({"font.size": 10})
     np.set_printoptions(suppress=True)
@@ -50,18 +48,20 @@ def plot_SIR(y, t, beta, gamma, already_plotted=False) -> plt.Figure:
         try:
             with open(".fig.pkl", "rb") as f:
                 fig, plot_num = pkl.load(f)
+                plt.subplots_adjust(top=1, bottom=0, left=0, right=1)
                 ax = fig.axes[0]
                 if plot_num == 4:
                     plot_num = 0
         except (FileNotFoundError, OSError):
             fig = plt.figure()
+            plt.subplots_adjust(top=1, bottom=0, left=0, right=1)
             ax = fig.add_subplot(111)
-            ax.text(
-                -0.05 * max(t),
-                max(S) * 1.05,
+            plt.text(
+                0.05,
+                0.96,
                 "© M. Urban, J. Jodłowska, J. Balbus, K. Kubica",
-                ha="left",
-                va="top",
+                fontsize=10,
+                transform=plt.gcf().transFigure,
             )
             ax.ticklabel_format(axis="y", useOffset=False, style="Plain")
             ax.set_xlabel("Time [days]")
@@ -69,13 +69,14 @@ def plot_SIR(y, t, beta, gamma, already_plotted=False) -> plt.Figure:
 
     else:
         fig = plt.figure()
+        plt.subplots_adjust(top=1, bottom=0.01, left=0.01, right=1)
         ax = fig.add_subplot(111)
-        ax.text(
-            -0.05 * max(t),
-            max(S) * 1.05,
+        plt.text(
+            0.05,
+            0.98,
             "© M. Urban, J. Jodłowska, J. Balbus, K. Kubica",
-            ha="left",
-            va="top",
+            fontsize=10,
+            transform=plt.gcf().transFigure,
         )
         ax.ticklabel_format(axis="y", useOffset=False, style="Plain")
         ax.set_xlabel("Time [days]")

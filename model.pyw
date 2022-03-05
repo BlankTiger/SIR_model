@@ -1,6 +1,7 @@
 import platform
 import PySimpleGUI as sg
 import os
+import importlib
 
 from utils.drawing import (
     create_updated_fig_SIR,
@@ -8,12 +9,14 @@ from utils.drawing import (
     delete_figure_agg,
     draw_fig,
 )
+from utils.icon import icon
 from utils.gui import layout
 from utils.mathematics import solve_SIR
 from utils.plots import plot_SIR
 from utils.validation import (
     validate_positive_float_input,
     validate_positive_int_input,
+    validate_pos_float_under_one,
 )
 
 if platform.system() == "Windows":
@@ -23,6 +26,16 @@ if platform.system() == "Windows":
         ctypes.windll.user32.SetProcessDPIAware()
     elif float(platform.release()) >= 8:
         ctypes.windll.shcore.SetProcessDpiAwareness(1)
+
+if "_PYIBoot_SPLASH" in os.environ and importlib.util.find_spec("pyi_splash"):
+    import pyi_splash
+
+    pyi_splash.close()
+
+if __name__ == "__main__":
+    icon = icon
+else:
+    icon = "icon.ico"
 
 
 def set_scale(scale):
@@ -55,6 +68,7 @@ window = sg.Window(
     title="SIR model",
     layout=layout,
     element_justification="c",
+    icon=icon,
     resizable=True,
     finalize=True,
 )
@@ -97,20 +111,24 @@ while True:
 
     if event == "-DRAW-" and with_vaccinations:
         delete_figure_agg(fig_agg)
-        if (
-            validate_positive_float_input(values["susceptible"])
-            and validate_positive_float_input(values["infectious"])
-            and validate_positive_float_input(values["recovered"])
-            and validate_positive_float_input(values["beta"])
-            and validate_positive_int_input(values["recovery_time"])
-            and validate_positive_int_input(values["duration"])
-            and validate_positive_float_input(values["sw_a"])
-            and validate_positive_int_input(values["sw_start"])
-            and validate_positive_float_input(values["vaccination_rate"])
-            and validate_positive_float_input(values["vaccination_eff"])
-            and validate_positive_int_input(values["vaccination_start"])
-            and validate_positive_int_input(values["vaccination_end"])
-        ):
+        try:
+            validate_positive_float_input(values["susceptible"], "susceptible")
+            validate_positive_float_input(values["infectious"], "infectious")
+            validate_positive_float_input(values["recovered"], "recovered")
+            validate_positive_float_input(values["beta"], "beta")
+            validate_positive_int_input(values["recovery_time"], "recovery time")
+            validate_positive_int_input(values["duration"], "duration")
+            validate_pos_float_under_one(values["sw_a"], "a")
+            validate_positive_int_input(values["sw_start"], "immunity loss start")
+            validate_positive_float_input(
+                values["vaccination_rate"], "vaccination rate"
+            )
+            validate_pos_float_under_one(values["vaccination_eff"], "vaccination eff")
+            validate_positive_int_input(
+                values["vaccination_start"], "vaccination start"
+            )
+            validate_positive_int_input(values["vaccination_end"], "vaccination end")
+
             S = int(float(values["susceptible"]))
             I = int(float(values["infectious"]))
             R = int(float(values["recovered"]))
@@ -167,20 +185,22 @@ while True:
                     window["-CANVAS-"].TKCanvas, figure, window["-TOOLBAR-"].TKCanvas
                 )
                 already_plotted = True
-        else:
-            sg.popup_error("Invalid input", title="Error")
+        except ValueError as e:
+            sg.popup_error(
+                "Invalid input:\n" + str(e), title="Invalid parameters", icon=icon
+            )
     elif event == "-DRAW-":
         delete_figure_agg(fig_agg)
-        if (
-            validate_positive_float_input(values["susceptible"])
-            and validate_positive_float_input(values["infectious"])
-            and validate_positive_float_input(values["recovered"])
-            and validate_positive_float_input(values["beta"])
-            and validate_positive_int_input(values["recovery_time"])
-            and validate_positive_int_input(values["duration"])
-            and validate_positive_float_input(values["sw_a"])
-            and validate_positive_int_input(values["sw_start"])
-        ):
+        try:
+            validate_positive_float_input(values["susceptible"], "susceptible")
+            validate_positive_float_input(values["infectious"], "infectious")
+            validate_positive_float_input(values["recovered"], "recovered")
+            validate_positive_float_input(values["beta"], "beta")
+            validate_positive_int_input(values["recovery_time"], "recovery time")
+            validate_positive_int_input(values["duration"], "duration")
+            validate_pos_float_under_one(values["sw_a"], "a")
+            validate_positive_int_input(values["sw_start"], "immunity loss start")
+
             susceptible = int(float(values["susceptible"]))
             infectious = int(float(values["infectious"]))
             recovered = int(float(values["recovered"]))
@@ -224,5 +244,7 @@ while True:
                     window["-CANVAS-"].TKCanvas, figure, window["-TOOLBAR-"].TKCanvas
                 )
                 already_plotted = True
-        else:
-            sg.popup_error("Invalid input", title="Error")
+        except ValueError as e:
+            sg.popup_error(
+                "Invalid input:\n" + str(e), title="Invalid parameters", icon=icon
+            )

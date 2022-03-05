@@ -1,11 +1,12 @@
 import numpy as np
 import utils
+from dataclasses import dataclass
 
 
+@dataclass
 class solution:
-    def __init__(self, t, y):
-        self.t = t
-        self.y = y
+    t: np.ndarray
+    y: np.ndarray
 
 
 def solve_SIR(time_range, y0, with_multiwave, t_3, **args):
@@ -93,19 +94,6 @@ def solve_SIR_with_vaccination(time_range, y0, t_1, t_2, with_multiwave, t_3, **
 
     sol = solution(np.array(time_points), np.array([S, I, R]))
     return sol
-
-
-def heaviside_analytical(t, tau):
-    """Analytical version of the Heaviside function.
-
-    Args:
-        t (float): Time.
-        tau (float): Time of the peak.
-
-    Returns:
-        float: The value of the Heaviside function at time t.
-    """
-    return 1 / (1 + np.exp(-5 * (t - tau)))
 
 
 def find_max_and_argmax(x, y):
