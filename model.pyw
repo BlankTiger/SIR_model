@@ -1,5 +1,6 @@
 import platform
 import PySimpleGUI as sg
+import numpy as np
 import os
 import importlib
 
@@ -146,7 +147,7 @@ while True:
             vac_end = int(values["vaccination_end"])
 
             if already_plotted:
-                figure = create_updated_fig_SIR_with_vaccination(
+                figure, sol = create_updated_fig_SIR_with_vaccination(
                     S,
                     I,
                     R,
@@ -166,7 +167,7 @@ while True:
                     window["-CANVAS-"].TKCanvas, figure, window["-TOOLBAR-"].TKCanvas
                 )
             else:
-                figure = create_updated_fig_SIR_with_vaccination(
+                figure, sol = create_updated_fig_SIR_with_vaccination(
                     S,
                     I,
                     R,
@@ -185,6 +186,24 @@ while True:
                     window["-CANVAS-"].TKCanvas, figure, window["-TOOLBAR-"].TKCanvas
                 )
                 already_plotted = True
+            msg = ""
+            if not with_multiwave and vac_rate:
+                indexes = np.where(
+                    sol.y[
+                        0,
+                        np.searchsorted(sol.t, vac_start) : np.searchsorted(
+                            sol.t, vac_end
+                        ),
+                    ]
+                    < vac_rate * vac_eff
+                )
+                if indexes[0].size:
+                    first_zero = sol.t[indexes[0][0]]
+                    msg += (
+                        f"Vaccinations finished on day: {int(first_zero+vac_start)}\n"
+                    )
+                    sg.popup_ok(msg, title="Vaccinations", icon=icon)
+
         except ValueError as e:
             sg.popup_error(
                 "Invalid input:\n" + str(e), title="Invalid parameters", icon=icon

@@ -30,7 +30,7 @@ def solve_SIR(time_range, y0, with_multiwave, t_3, **args):
             k2 = np.array(f(t + dt2, prev_y + dt2 * k1, **args))
             k3 = np.array(f(t + dt2, prev_y + dt2 * k2, **args))
             k4 = np.array(f(t + dt, prev_y + dt * k3, **args))
-            new_y = prev_y + (dt / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4)
+            new_y = np.maximum(prev_y + (dt / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4), 0)
             S[t + 1] = new_y[0]
             I[t + 1] = new_y[1]
             R[t + 1] = new_y[2]
@@ -40,7 +40,7 @@ def solve_SIR(time_range, y0, with_multiwave, t_3, **args):
             k2 = np.array(f(t + dt2, prev_y + dt2 * k1, **args))
             k3 = np.array(f(t + dt2, prev_y + dt2 * k2, **args))
             k4 = np.array(f(t + dt, prev_y + dt * k3, **args))
-            new_y = prev_y + (dt / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4)
+            new_y = np.maximum(prev_y + (dt / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4), 0)
             S[t + 1] = new_y[0]
             I[t + 1] = new_y[1]
             R[t + 1] = new_y[2]
@@ -77,7 +77,7 @@ def solve_SIR_with_vaccination(time_range, y0, t_1, t_2, with_multiwave, t_3, **
             k2 = np.array(f(t + dt2, prev_y + dt2 * k1, **args))
             k3 = np.array(f(t + dt2, prev_y + dt2 * k2, **args))
             k4 = np.array(f(t + dt, prev_y + dt * k3, **args))
-            new_y = prev_y + (dt / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4)
+            new_y = np.maximum(prev_y + (dt / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4), 0)
             S[t + 1] = new_y[0]
             I[t + 1] = new_y[1]
             R[t + 1] = new_y[2]
@@ -87,7 +87,7 @@ def solve_SIR_with_vaccination(time_range, y0, t_1, t_2, with_multiwave, t_3, **
             k2 = np.array(f(t + dt2, prev_y + dt2 * k1, **args))
             k3 = np.array(f(t + dt2, prev_y + dt2 * k2, **args))
             k4 = np.array(f(t + dt, prev_y + dt * k3, **args))
-            new_y = prev_y + (dt / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4)
+            new_y = np.maximum(prev_y + (dt / 6.0) * (k1 + 2 * k2 + 2 * k3 + k4), 0)
             S[t + 1] = new_y[0]
             I[t + 1] = new_y[1]
             R[t + 1] = new_y[2]

@@ -15,9 +15,7 @@ def SIR_with_vaccination(t, y, beta, gamma, eff, vac_rate, a, R_prev):
     diff_m = a * R_prev
     diff_v = eff * vac_rate
     if S - beta * S * I - diff_v < 0:
-        diff_v = 0
-    if R - diff_m < 0:
-        diff_m = 0
+        diff_v = S
 
     _S = -beta * S * I
     _R = gamma * I
