@@ -51,7 +51,7 @@ def solve_SIR(time_range, y0, with_multiwave, t_3, **args):
 
 def solve_SIR_with_vaccination(time_range, y0, t_1, t_2, with_multiwave, t_3, **args):
     f = utils.models.SIR_with_vaccination
-    dt = 1
+    dt = 0.05
     time_points = np.arange(time_range[0], time_range[1], dt)
     (S, I, R) = (np.zeros(shape=(len(time_points))) for _ in range(3))
     S[0] = y0[0]
@@ -69,7 +69,7 @@ def solve_SIR_with_vaccination(time_range, y0, t_1, t_2, with_multiwave, t_3, **
         dt2 = dt / 2
         prev_y = np.array([S[t], I[t], R[t]])
 
-        if t_1 <= curr_t <= t_2:
+        if t_1 <= curr_t < t_2 + 1:
             args["vac_rate"] = vac_rate
         else:
             args["vac_rate"] = 0
